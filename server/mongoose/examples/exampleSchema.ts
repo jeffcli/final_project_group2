@@ -3,7 +3,7 @@
 //Can be deleted later 
 
 
-/*
+
 import {Schema, InferSchemaType} from "mongoose"; 
 export const exampleSchema:Schema= new Schema<ExampleType> ({
     greeting:{
@@ -12,4 +12,3 @@ export const exampleSchema:Schema= new Schema<ExampleType> ({
     }
 }); 
 export declare type ExampleType = InferSchemaType<typeof exampleSchema>
-*/ 
