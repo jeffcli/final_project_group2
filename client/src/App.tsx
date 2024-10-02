@@ -20,7 +20,8 @@ function App() {
 
   return (
     <>
-      <div>
+      <div className='font-mono text-8xl'>
+        <p className='font-mono text-8xl text-black text-center'>Test Tailwind</p>
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>

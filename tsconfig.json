@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+   "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "target": "ES2022",
     "module": "commonjs",
     "rootDir": "./",
@@ -8,6 +12,6 @@
     "esModuleInterop": true,
     "skipLibCheck": true
   },
-  "include": ["**/*.ts", "client/vite.config.js"],
+  "include": ["**/*.ts", "client/vite.config.ts"],
   "exclude": ["node_modules"]
 }
