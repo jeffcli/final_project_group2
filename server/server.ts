@@ -11,11 +11,12 @@ const app = express();
 app.use(express.urlencoded({extended:true})); 
 app.use(cors()); 
 app.use(express.json()); 
-app.get('/health', async (req, res) => { 
+app.get('/api/health', async (req, res) => { 
     res.json({"message":"backend healthy!"}); 
+    console.log("here"); 
 }); 
 app.disable('etag'); 
-app.listen(process.env.BE_PORT||3001, () => { 
+app.listen(process.env.VITE_BE_PORT||3001, () => { 
     console.log("App ready on port 3001"); 
 }); 
 export default app; 
