@@ -1,8 +1,8 @@
 //express server will go here 
 import dotenv from 'dotenv'; 
-dotenv.config({path:"../.env"}); 
-console.log(process.env.MONGO_URI); 
+import addFriend from "./routes/addFriend"; 
 
+dotenv.config({path:"../.env"}); 
 import mongoose from 'mongoose'; 
 import express from 'express'; 
 import cors from 'cors'; 
@@ -15,6 +15,7 @@ app.get('/api/health', async (req, res) => {
     res.json({"message":"backend healthy!"}); 
     console.log("here"); 
 }); 
+app.use(addFriend); 
 app.disable('etag'); 
 app.listen(process.env.VITE_BE_PORT||3001, () => { 
     console.log("App ready on port 3001"); 
