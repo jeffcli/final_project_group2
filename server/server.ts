@@ -19,7 +19,7 @@ app.get('/api/health', async (req, res) => {
 }); 
 app.use(addFriend); 
 app.disable('etag'); 
-app.listen(process.env.VITE_BE_PORT||3001, () => { 
+app.listen(process.env.PORT||3001, () => { 
     console.log("App ready on port 3001"); 
 }); 
 export default app; 
