@@ -9,7 +9,7 @@ dotenv.config({path:"../.env"})
 export default defineConfig({
   plugins: [react()],
   build:{
-    outDir:'/dist'
+    outDir:'dist'
   }, 
   
   server:{
