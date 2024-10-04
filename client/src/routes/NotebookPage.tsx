@@ -13,6 +13,7 @@ export default function NotebookPage() {
     const [entries, setEntries] = useState<{ [key: string]: Entry[] }>({});
     const [date, setDate] = useState<Date>(new Date());
     const [isTyping, setIsTyping] = useState<boolean>(false);
+    const [editingIndex, setEditingIndex] = useState<number | null>(null);
     const [expandedEntryIndex, setExpandedEntryIndex] = useState<number | null>(null);
 
     const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,25 +27,37 @@ export default function NotebookPage() {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        const dateString = date.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+        const dateString = date.toISOString().split('T')[0];
         if (title.trim() && text.trim()) {
             setEntries(prevEntries => {
                 const newEntries = { ...prevEntries };
                 if (!newEntries[dateString]) {
                     newEntries[dateString] = [];
                 }
-                newEntries[dateString].push({ title, text });
+                if (editingIndex !== null) {
+
+                    newEntries[dateString][editingIndex] = { title, text };
+                } else {
+
+                    newEntries[dateString].push({ title, text });
+                }
                 return newEntries;
             });
-            setTitle('');
-            setText('');
-            setIsTyping(false);
+            resetForm();
         }
+    };
+
+    const resetForm = () => {
+        setTitle('');
+        setText('');
+        setIsTyping(false);
+        setEditingIndex(null);
     };
 
     const handleDateChange = (newDate: Date) => {
         setDate(newDate);
-        setExpandedEntryIndex(null); // Reset expanded index when changing date
+        resetForm();
+        setExpandedEntryIndex(null);
     };
 
     const handleDeleteEntry = (entryIndex: number) => {
@@ -54,7 +67,7 @@ export default function NotebookPage() {
             if (newEntries[dateString]) {
                 newEntries[dateString] = newEntries[dateString].filter((_, index) => index !== entryIndex);
                 if (newEntries[dateString].length === 0) {
-                    delete newEntries[dateString]; // Remove date if no entries left
+                    delete newEntries[dateString];
                 }
             }
             return newEntries;
@@ -65,17 +78,29 @@ export default function NotebookPage() {
         setExpandedEntryIndex(expandedEntryIndex === index ? null : index);
     };
 
-    const dateString = date.toISOString().split('T')[0]; // Format current date
+    const handleEditEntry = (index: number) => {
+        const dateString = date.toISOString().split('T')[0];
+        const entryToEdit = entries[dateString][index];
+        if (entryToEdit) {
+            setTitle(entryToEdit.title);
+            setText(entryToEdit.text);
+            setEditingIndex(index);
+        }
+    };
+
+    const dateString = date.toISOString().split('T')[0];
 
     return (
-        <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-            <h1 className="text-2xl font-bold mb-4">Thoughts of the day</h1>
+        <div className="max-w-3xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md font-sans">
+            <h1 className="text-center text-2xl font-bold mb-4">Thoughts of the day</h1>
 
-            <Calendar
-                onChange={handleDateChange}
-                value={date}
-                className="mb-4"
-            />
+            <div className="flex justify-center mb-4">
+                <Calendar
+                    onChange={handleDateChange}
+                    value={date}
+                    className="w-full max-w-xs"
+                />
+            </div>
 
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
@@ -99,28 +124,99 @@ export default function NotebookPage() {
                     type="submit"
                     className="mt-2 px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
                 >
-                    Add Entry
+                    {'Add Entry'}
                 </button>
             </form>
-            <h2 className="mt-6 text-xl font-semibold">Entries</h2>
+            <h2 className="mt-6 text-xl font-semibold">Entries for {date.toLocaleDateString()}:</h2>
             <ul className="mt-2 space-y-2">
-                {(entries[dateString] || []).map(({ title, text }, index) => (
+                {(entries[dateString] || []).map((entry, index) => (
                     <li key={index} className="p-4 bg-gray-100 rounded-md">
-                        <div className="flex justify-between items-center cursor-pointer" onClick={() => toggleEntry(index)}>
-                            <strong>{title}</strong>
-                            <button
-                                onClick={(e) => {
-                                    e.stopPropagation(); // Prevent triggering toggle on button click
-                                    handleDeleteEntry(index);
-                                }}
-                                className="ml-4 text-red-600 hover:text-red-800"
-                            >
-                                Delete
-                            </button>
-                        </div>
-                        {expandedEntryIndex === index && (
+                        {editingIndex === index ? (
+                            <div className="flex flex-col">
+                                <input
+                                    type="text"
+                                    value={entry.title}
+                                    onChange={(e) => {
+                                        const newTitle = e.target.value;
+                                        setEntries(prevEntries => {
+                                            const newEntries = {...prevEntries};
+                                            if (!newEntries[dateString]) {
+                                                newEntries[dateString] = [];
+                                            }
+                                            newEntries[dateString][index] = {
+                                                ...newEntries[dateString][index],
+                                                title: newTitle
+                                            };
+                                            return newEntries;
+                                        });
+                                    }}
+                                    className="mb-2 p-1 border rounded-md"
+                                    placeholder="Edit Title"
+                                />
+                                <textarea
+                                    value={entry.text}
+                                    onChange={(e) => {
+                                        const newText = e.target.value;
+                                        setEntries(prevEntries => {
+                                            const newEntries = {...prevEntries};
+                                            if (!newEntries[dateString]) {
+                                                newEntries[dateString] = [];
+                                            }
+                                            newEntries[dateString][index] = {
+                                                ...newEntries[dateString][index],
+                                                text: newText
+                                            };
+                                            return newEntries;
+                                        });
+                                    }}
+                                    className="h-24 p-1 border rounded-md"
+                                    placeholder="Edit Text"
+                                />
+                                <div className="flex justify-end mt-2">
+                                    <button
+                                        onClick={() => {
+                                            // Directly save the entry
+                                            setEditingIndex(null);
+                                        }}
+                                        className="px-4 py-2 text-white bg-green-600 rounded hover:bg-green-700 mr-2"
+                                    >
+                                        Save
+                                    </button>
+                                    <button
+                                        onClick={() => setEditingIndex(null)}
+                                        className="px-4 py-2 text-red-600 rounded hover:text-red-800"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="flex justify-between items-center">
+                                <strong
+                                    className="cursor-pointer"
+                                    onClick={() => toggleEntry(index)}
+                                >
+                                    {entry.title}
+                                </strong>
+                                <div>
+                                    <button
+                                        onClick={() => handleEditEntry(index)}
+                                        className="text-blue-600 hover:text-blue-800 mr-2"
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        onClick={() => handleDeleteEntry(index)}
+                                        className="text-red-600 hover:text-red-800"
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                        {expandedEntryIndex === index && editingIndex !== index && (
                             <div className="mt-2 p-2 border rounded-md bg-white">
-                                {text}
+                                {entry.text}
                             </div>
                         )}
                     </li>
