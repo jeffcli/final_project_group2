@@ -1,6 +1,6 @@
 import express from 'express'; 
 import friends from "../mongoose/friends/model"; 
-import { FriendsType } from 'server/mongoose/friends/schema';
+import { FriendsType } from '../mongoose/friends/schema';
 const router = express.Router(); 
 router.post('/api/addFriend', async (req, res) => {
     const createdBy:string = req.body.userName; 
