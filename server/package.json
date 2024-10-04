@@ -1,0 +1,31 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "tsx server.ts", 
+    "build": "tsc -b", 
+  
+    "start": "node ./dist/server.js"
+  
+  
+  }, 
+  "compilerOptions":{
+    "target":"ES6", 
+    "module":"ESNext", 
+    "baseUrl":".", 
+    "paths":{
+      "server/*":["*"]
+    }, 
+    "outDir":"./dist", 
+    "strict":true, 
+    "esModuleInterop": true,
+    "skipLibCheck": true 
+  }, 
+  "include":[
+    "**/*/.ts"
+  ],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
