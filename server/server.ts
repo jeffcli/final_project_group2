@@ -1,6 +1,7 @@
 //express server will go here 
 import dotenv from 'dotenv'; 
 import addFriend from "./routes/addFriend"; 
+import path from 'path';
 
 dotenv.config({path:"../.env"}); 
 import mongoose from 'mongoose'; 
@@ -8,6 +9,7 @@ import express from 'express';
 import cors from 'cors'; 
 mongoose.connect(process.env.MONGO_URI || "").then(() => console.log("MongoDB connected!")).catch(() => console.log("Could not connect to MongoDB")); 
 const app = express(); 
+app.use(express.static(path.join(__dirname, '../../client/dist')))
 app.use(express.urlencoded({extended:true})); 
 app.use(cors()); 
 app.use(express.json()); 
