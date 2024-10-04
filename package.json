@@ -10,6 +10,9 @@
     "start:frontend": "cd client && npm run dev",
     "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\" "
   },
+  "engines": {
+    "node": "20.11.1"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -17,7 +20,8 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
     "mongodb": "^6.9.0",
-    "mongoose": "^8.7.0"
+    "mongoose": "^8.7.0",
+    "serve": "^14.2.3"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
