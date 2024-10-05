@@ -1,4 +1,4 @@
-import photo from "../assets/Dante_test_photo.jpg"; 
+import photo from "../assets/default-photo.jpeg"; 
 
 interface props{
     name:string; 
@@ -21,6 +21,7 @@ export const FriendComponent = (props:props) => {
                     <p className=" relative text-right text-lg ">{props.relation}</p>
                 </div>
                     <div className="flex ml-auto items-center">
+
                     <Progress value={10} className=" ml-10 w-36"/> 
                     <Button className="ml-5" > Update Friend </Button>
                     <Button className="ml-5 items-c" variant="destructive"> Remove Friend </Button>
