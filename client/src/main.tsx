@@ -3,7 +3,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Root from "./routes/Root.tsx";
 import App from './App.tsx'
 import LandingPage from './routes/LandingPage.tsx';
-import NotebookPage from './routes/NotebookPage.tsx';
+
 const router = createBrowserRouter([
   { // All routes for logged in users should be children of this route
     path: "/",
@@ -13,11 +13,6 @@ const router = createBrowserRouter([
         path: "",
         element: <App />,
       },
-      {
-        path: "journal",
-        element: <NotebookPage />,
-      },
-
     ],
   },
   { // Landing page for non-logged in users

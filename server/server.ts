@@ -2,6 +2,8 @@
 import dotenv from 'dotenv'; 
 import addFriend from "./routes/addFriend"; 
 import path from 'path';
+import { auth } from "express-oauth2-jwt-bearer";
+
 
 dotenv.config({path:"../.env"}); 
 import mongoose from 'mongoose'; 
@@ -19,6 +21,11 @@ app.get('/api/health', async (req, res) => {
     console.log("here"); 
 }); 
 app.use(addFriend); 
+app.use(auth({
+    audience:'/api', 
+    issuerBaseURL: 'https://dev-1hayc3662ummsupb.us.auth0.com/', 
+    tokenSigningAlg: 'RS256'
+}))
 app.disable('etag'); 
 app.listen(process.env.PORT||3001, () => { 
     console.log(`App on ${process.env.PORT}`); 

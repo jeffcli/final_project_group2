@@ -3,29 +3,32 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "tsx server.ts", 
-    "build": "tsc -b", 
-  
+    "test": "tsx server.ts",
+    "build": "tsc -b",
     "start": "node ./dist/server.js"
-  
-  
-  }, 
-  "compilerOptions":{
-    "target":"ES6", 
-    "module":"ESNext", 
-    "baseUrl":".", 
-    "paths":{
-      "server/*":["*"]
-    }, 
-    "outDir":"./dist", 
-    "strict":true, 
+  },
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "ESNext",
+    "baseUrl": ".",
+    "paths": {
+      "server/*": [
+        "*"
+      ]
+    },
+    "outDir": "./dist",
+    "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true 
-  }, 
-  "include":[
+    "skipLibCheck": true
+  },
+  "include": [
     "**/*/.ts"
   ],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "express-oauth2-jwt-bearer": "^1.6.0",
+    "jose": "^5.9.3"
+  }
 }
