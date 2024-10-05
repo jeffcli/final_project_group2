@@ -1,7 +1,11 @@
 import { FriendComponent } from "@/components/FriendComponent"
 import { InputCard } from "@/components/InputCard"
+import { useAuth0 } from "@auth0/auth0-react"
 
 export const Friends = () => { 
+    const {user} = useAuth0(); 
+   
+    
     return(
         <>
        

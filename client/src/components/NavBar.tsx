@@ -1,7 +1,19 @@
 import { Button } from "@/components/ui/button";
 import Logo from "@/assets/logo.png";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export default function NavBar() {
+    const {logout} = useAuth0(); 
+
+    const handleLogout = () => { 
+        logout({
+            logoutParams:{
+                returnTo: `${window.location.origin}/welcome`,
+            }
+        }); 
+        
+
+    }
     return (
         <div className="static h-14 bg-slate-100 flex justify-between px-3">
             <div className="my-auto flex flex-row gap-2 h-full">
@@ -41,10 +53,10 @@ export default function NavBar() {
                             </Button>
                     </li>
                     <li className="">
-                            <Button variant="default" asChild>
-                                <a href="/logout"> 
+                            <Button onClick={handleLogout} className="hover:cursor-pointer" variant="default" asChild>
+                                <p > 
                                     Logout
-                                </a>
+                                </p>
                             </Button>
                     </li>
                 </ul>
