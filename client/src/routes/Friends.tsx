@@ -3,6 +3,8 @@ import { InputCard } from "@/components/InputCard"
 
 export const Friends = () => { 
     return(
+        <>
+       
         <div className="h-screen w-full font-poppins  grid grid-cols-2">
             <div className = "flex flex-row  justify-center col-span-1 mt-10">
                  <InputCard/>
@@ -13,12 +15,11 @@ export const Friends = () => {
                 Your friends: 
                 <FriendComponent name="Dante Giles" photoURL="" relation="Booch"/>
                 <FriendComponent name="Jeffrey Li" photoURL="" relation="Booch"/>
-
-
             </div>        
         </div>
            
            
         </div>
+        </>
     )
 }   

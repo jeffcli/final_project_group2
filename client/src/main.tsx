@@ -13,16 +13,17 @@ const router = createBrowserRouter([
         path: "",
         element: <App />,
       },
+      {
+        path:"friends", 
+        element:<Friends/>
+      }
     ],
   },
   { // Landing page for non-logged in users
     path: "/welcome",
     element: <LandingPage />,
   },
-  {
-    path:"/friends", 
-    element:<Friends/>
-  }
+  
 ]);
 
 createRoot(document.getElementById('root')!).render(
