@@ -49,11 +49,9 @@ export const Friends = () => {
             <div className = "text-left text-3xl ml-5 mt-10">
                 Your friends: 
                 {friends.map((item) =>{ 
-                
                         return(
                             <FriendComponent name = {(item as Friend).name} photoURL="" relation={(item as Friend).relationship}/>
                         )
-                   
                 })}
                 
             </div>        
