@@ -1,10 +1,13 @@
 import { FriendComponent } from "@/components/FriendComponent"
 import { InputCard } from "@/components/InputCard"
-import { useAuth0 } from "@auth0/auth0-react"
+import { useFriendsContext } from "@/contexts/FriendsContext"
 
+type Friend = {
+    name:string, 
+    relation:string
+}
 export const Friends = () => { 
-    const {user} = useAuth0(); 
-   
+    const {friends} = useFriendsContext(); 
     
     return(
         <>
@@ -17,7 +20,14 @@ export const Friends = () => {
                 
             <div className = "text-left text-3xl ml-5 mt-10">
                 Your friends: 
-                <FriendComponent name="Dante Giles" photoURL="" relation="Booch"/>
+                {friends.map((item) =>{ 
+                
+                        return(
+                            <FriendComponent name = {(item as Friend).name} photoURL="" relation={(item as Friend).relation}/>
+                        )
+                   
+                })}
+                
                 <FriendComponent name="Jeffrey Li" photoURL="" relation="Booch"/>
             </div>        
         </div>
