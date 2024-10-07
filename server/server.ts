@@ -6,6 +6,7 @@ import updateFriend from './routes/updateFriend';
 import path from 'path';
 import removeFriend from './routes/removeFriend'; 
 import { auth } from "express-oauth2-jwt-bearer";
+import getUsers from './routes/getUsers'; 
 
 
 dotenv.config({path:"../.env"}); 
@@ -36,6 +37,7 @@ app.use(addFriend);
 app.use(getFriends); 
 app.use(removeFriend); 
 app.use(updateFriend); 
+app.use(getUsers); 
 app.disable('etag'); 
 app.listen(process.env.PORT||3001, () => { 
     console.log(`App on ${process.env.PORT}`); 

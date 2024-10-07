@@ -25,16 +25,29 @@ import {
   import axios from 'axios'; 
 
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "./ui/button"
 import { useAuth0 } from "@auth0/auth0-react";
 import { MakeProtectedPostRequest } from "@/utils/makeProtectedPostRequest";
 import { toast } from "sonner";
 import { FriendsProvider, useFriendsContext } from "@/contexts/FriendsContext";
+import { makeProtectedGetRequest } from "@/utils/makeProtectedGetRequest";
   export const InputCard = () => { 
-    const {user} = useAuth0(); 
+
+    const [users, setUsers] = useState<string[]>([]); 
+    const {user, getAccessTokenSilently} = useAuth0(); 
+
+    useEffect(() => { 
+        const makeReq = async () => { 
+            const token = await getAccessTokenSilently(); 
+            const data = await makeProtectedGetRequest('/api/getUsers',token ); 
+            console.log(data.data); 
+            setUsers(data.data); 
+
+        }
+        makeReq().then()
+    }, [window]); 
     const {setFriends} = useFriendsContext(); 
-    const { getAccessTokenSilently } = useAuth0();
     const [open, setOpen] = useState<boolean>(false); 
     const [value, setValue] = useState<string>(''); 
     const [relationship, setRelationship] = useState<string>(''); 
@@ -58,32 +71,7 @@ import { FriendsProvider, useFriendsContext } from "@/contexts/FriendsContext";
 
     
     }
-    const options = [
-        {
-            value:"Dante Giles", 
-            label:"Dante Giles"
-        }, 
-        {
-            value:"Carter Moore", 
-            label:"Carter Moore"
-        },  
-        {
-            value:"Vivek Jagadeesh", 
-            label:"Vivek Jagadeesh"
-        }, 
-        {
-            value:"Jack Rooney", 
-            label: "Jack Rooney"
-        }, 
-        {
-            value: "Seth McGowan", 
-            label:"Seth McGowan"
-        }, 
-        {
-            value:"Ace Beattie", 
-            label: "Ace Beattie"
-        }
-      ]
+   
     return(
     <div className="h-full w-4/5 ml-5  text-center ">
         <Card className="shadow-2xl">
@@ -96,7 +84,7 @@ import { FriendsProvider, useFriendsContext } from "@/contexts/FriendsContext";
                     <Popover open={open} onOpenChange={setOpen}>
                     <PopoverTrigger asChild>
                          <Button variant="outline" role="combobox" aria-expanded={open} className = "w-80 justify-between">
-                             {value? options.find((person) => person.value === value)?.label: "Select a friend to add" }
+                             {value? users.find((person) => person === value): "Select a friend to add" }
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-80 p-0">
@@ -105,15 +93,15 @@ import { FriendsProvider, useFriendsContext } from "@/contexts/FriendsContext";
                     <CommandList>
                         <CommandEmpty>No Friends Found</CommandEmpty>
                         <CommandGroup>
-                            {options.map((person) => { 
+                            {users.map((person) => { 
                                 return(
-                                    <CommandItem key ={person.value} value = {person.value} onSelect={(selectedValue) => {
+                                    <CommandItem key ={person} value = {person} onSelect={(selectedValue) => {
                                         setValue(selectedValue === value ? "":selectedValue); 
                                         setOpen(false); 
                                     }}
                                         >
                                             <img className=" h-8 rounded-sm aspect-square object-cover mr-5 " src={photo} alt="User photo" />
-                                           {person.label}
+                                           {person}
                                     </CommandItem>
                                 )
                             })}
@@ -131,12 +119,12 @@ import { FriendsProvider, useFriendsContext } from "@/contexts/FriendsContext";
                 <p className="text-2xl font-bold mb-5">Connect with other users!</p>
            
                 <div className="text-left font-lg">
-                    {options.map((person) => { 
+                    {users.map((person) => { 
                         return(
                             <div className="flex flex-col items-start mb-2">
                                 <div className="flex flex-row flex-wrap justify-between w-full">
                                     <img className=" h-8 rounded-sm aspect-square object-cover mr-5 " src={photo} alt="Alt" />
-                                    <p className="text-lg ">{person.label}</p>
+                                    <p className="text-lg ">{person}</p>
                                     <Button className="flex ml-auto">Add friend</Button>
                                 </div>
                             </div>
