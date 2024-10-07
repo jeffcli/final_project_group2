@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import addFriend from "./routes/addFriend"; 
 import getFriends from "./routes/getFriends"; 
 import path from 'path';
+import removeFriend from './routes/removeFriend'; 
 import { auth } from "express-oauth2-jwt-bearer";
 
 
@@ -32,6 +33,7 @@ app.get('/api/health', async (req, res) => {
 // }))
 app.use(addFriend);  
 app.use(getFriends); 
+app.use(removeFriend); 
 app.disable('etag'); 
 app.listen(process.env.PORT||3001, () => { 
     console.log(`App on ${process.env.PORT}`); 
