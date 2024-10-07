@@ -25,11 +25,10 @@ export const FriendComponent = (props:props) => {
             userName:user!.name
         }; 
         const data = await MakeProtectedPostRequest('/api/removeFriend', removeUser, token ); 
-        console.log("removed", data.data); 
         setFriends(data.data); 
         toast.success(`Removed ${props.name}`); 
         location.reload(); 
-        
+
         
         return; 
     }

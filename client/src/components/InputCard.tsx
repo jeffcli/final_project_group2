@@ -56,7 +56,6 @@ import { makeProtectedGetRequest } from "@/utils/makeProtectedGetRequest";
             if(!fetched){
                 const token = await getAccessTokenSilently(); 
             const data = await makeProtectedGetRequest('/api/getUsers',token ); 
-            console.log(data.data); 
             setUsers(data.data); 
             setAllUsers(data.data); 
 
@@ -69,12 +68,6 @@ import { makeProtectedGetRequest } from "@/utils/makeProtectedGetRequest";
         }
         makeReq().then()
     }, [ users, friends]);
-    useEffect(() => { 
-        setParsed(false); 
-        console.log("updating!"); 
-
-
-    }, [friends])
 
 
 
@@ -95,7 +88,6 @@ import { makeProtectedGetRequest } from "@/utils/makeProtectedGetRequest";
         const token = await getAccessTokenSilently(); 
         const data = await MakeProtectedPostRequest('/api/addFriend', friendItem, token); 
         toast.success('Friend Added!'); 
-        console.log("data is", data.data[0].friends); 
         setFriends(data.data[0].friends); 
         
 
@@ -110,7 +102,6 @@ import { makeProtectedGetRequest } from "@/utils/makeProtectedGetRequest";
         const token = await getAccessTokenSilently(); 
         const data = await MakeProtectedPostRequest('/api/addFriend', friendItem, token); 
         // toast.success('Friend Added!'); 
-        console.log("data is", data.data[0].friends); 
         setFriends(data.data[0].friends); 
         const newUsers = users.filter((item) => item!=clickedName); 
         setUsers(newUsers); 
@@ -118,11 +109,9 @@ import { makeProtectedGetRequest } from "@/utils/makeProtectedGetRequest";
         
     }
     useEffect(() => {
-        console.log("foundations webware time"); 
 
         if(users.length && friends.length && !parsed){
             const names:string[] = []; 
-            console.log(users, friends); 
             for(let i = 0; i < friends.length; i++){
                 names.push((friends[i] as Friend).name)
             }

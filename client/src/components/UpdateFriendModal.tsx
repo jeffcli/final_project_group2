@@ -34,7 +34,6 @@ export const UpdateFriendModal = (props:Props) => {
             newRelationship: updateRelationship
         }; 
         const data = await MakeProtectedPostRequest('/api/updateFriend', toUpdate, token ); 
-        console.log("herro", data.data[0].friends); 
         setFriends(data.data[0].friends)
         toast.success(`Updated ${props.name}`); 
         props.setOpen(false); 

@@ -12,10 +12,8 @@ function App() {
       }); 
       const data = await makeReq.json(); 
       
-      console.log("made request", data)
     }
     dummyRequest().then(); 
-    console.log("running ue!"); 
   }, [window])
 
   return (
