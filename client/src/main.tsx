@@ -7,7 +7,8 @@ import { Friends } from './routes/Friends.tsx';
 import {Auth0Provider} from "@auth0/auth0-react";
 import { AuthenticationGuard } from './components/AuthenticationGuard.tsx';
 import Notebook from "@/routes/NotebookPage.tsx";
-
+import { Toaster, toast } from 'sonner'
+import { FriendsProvider } from './contexts/FriendsContext.tsx';
 const router = createBrowserRouter([
   { // All routes for logged in users should be children of this route
     path: "/",
@@ -38,13 +39,16 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
     <>
+    <FriendsProvider>
+    <Toaster position='top-right' richColors/>
       <Auth0Provider
           useRefreshTokens
           cacheLocation='localstorage'
           domain='dev-1hayc3662ummsupb.us.auth0.com'
           clientId='C8KUX8xnplvjaekDTmTGhin7a0UYoOyl'
+          
           authorizationParams={{
-            redirect_uri: `${window.location.origin}/friends`
+            redirect_uri: `${window.location.origin}/friends`, 
           }}
 
       >
@@ -53,6 +57,7 @@ createRoot(document.getElementById('root')!).render(
 
         <RouterProvider router={router} />
       </Auth0Provider>
+      </FriendsProvider>
     </>
 
 )

@@ -1,9 +1,9 @@
-// import { Button } from "../components/ui/button";
-import {useState} from "react";
+import { useState } from "react";
 
 interface Entry {
     title: string;
     text: string;
+    dateCreated: string;
 }
 
 interface EntriesListProps {
@@ -12,7 +12,7 @@ interface EntriesListProps {
     toggleEntry: (index: number) => void;
     editingIndex: number | null;
     setEditingIndex: (index: number | null) => void;
-    handleEditEntry: (index: number) => void;
+    handleEditEntry: (index: number, newTitle: string, newText: string) => void;
     handleDeleteEntry: (entryIndex: number) => void;
 }
 
@@ -36,7 +36,7 @@ const EntriesList: React.FC<EntriesListProps> = ({
 
     const handleSave = (index: number) => {
         handleEditEntry(index, editedTitle, editedText);
-        setEditingIndex(null); // Exit editing mode
+        setEditingIndex(null);
     };
 
     return (
@@ -62,7 +62,7 @@ const EntriesList: React.FC<EntriesListProps> = ({
                                 />
                                 <div className="flex justify-end mt-2">
                                     <button
-                                        onClick={() => handleSave(index)} // Save changes
+                                        onClick={() => handleSave(index)}
                                         className="px-4 py-2 text-white bg-green-600 rounded hover:bg-green-700 mr-2"
                                     >
                                         Save
@@ -84,9 +84,10 @@ const EntriesList: React.FC<EntriesListProps> = ({
                                     >
                                         {entry.title}
                                     </strong>
+                                    <div className="text-sm text-gray-500">{entry.dateCreated}</div>
                                     <div>
                                         <button
-                                            onClick={() => handleEditStart(index)} // Start editing
+                                            onClick={() => handleEditStart(index)}
                                             className="text-green-600 hover:text-green-800 mr-2"
                                         >
                                             Edit

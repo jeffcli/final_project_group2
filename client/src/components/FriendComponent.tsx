@@ -11,6 +11,8 @@ import { Button } from "./ui/button";
 
 
 export const FriendComponent = (props:props) => { 
+ 
+
     return(
         <div>
             <Separator/>

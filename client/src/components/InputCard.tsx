@@ -22,14 +22,42 @@ import {
   } from "@/components/ui/popover"
   import photo from "../assets/default-photo.jpeg"; 
   import { Input } from "@/components/ui/input"
+  import axios from 'axios'; 
 
 
 import { useState } from "react"
 import { Button } from "./ui/button"
+import { useAuth0 } from "@auth0/auth0-react";
+import { MakeProtectedPostRequest } from "@/utils/makeProtectedPostRequest";
+import { toast } from "sonner";
+import { FriendsProvider, useFriendsContext } from "@/contexts/FriendsContext";
   export const InputCard = () => { 
+    const {user} = useAuth0(); 
+    const {setFriends} = useFriendsContext(); 
+    const { getAccessTokenSilently } = useAuth0();
     const [open, setOpen] = useState<boolean>(false); 
     const [value, setValue] = useState<string>(''); 
     const [relationship, setRelationship] = useState<string>(''); 
+    const handleClear = () =>{
+        setValue(''); 
+        setRelationship('') ;
+        setOpen(false);
+    }
+    const handleSubmit = async () =>{
+        const friendItem = {
+            "createdBy": user!.name, 
+            "toAdd": value,
+            "relationship":relationship, 
+        }; 
+        const token = await getAccessTokenSilently(); 
+        const data = await MakeProtectedPostRequest('/api/addFriend', friendItem, token); 
+        toast.success('Friend Added!'); 
+        console.log("data is", data.data[0].friends); 
+        setFriends(data.data[0].friends); 
+        
+
+    
+    }
     const options = [
         {
             value:"Dante Giles", 
@@ -84,7 +112,7 @@ import { Button } from "./ui/button"
                                         setOpen(false); 
                                     }}
                                         >
-                                            <img className=" h-8 rounded-sm aspect-square object-cover mr-5 " src={photo} alt="Alt" />
+                                            <img className=" h-8 rounded-sm aspect-square object-cover mr-5 " src={photo} alt="User photo" />
                                            {person.label}
                                     </CommandItem>
                                 )
@@ -95,6 +123,10 @@ import { Button } from "./ui/button"
             </PopoverContent>
             </Popover>
             <Input  className = " mt-5 w-80" placeholder="Enter relationship type" value={relationship} onChange={(e) => setRelationship(e.target.value)}/>
+            <div className = "flex flex-row items-center mt-3">
+                <Button onClick={handleClear} variant="destructive" className ="mr-3 w-20">Clear</Button>
+                <Button onClick={handleSubmit} className="w-20">Submit</Button>
+            </div>            
             <div className = "mt-5  ">
                 <p className="text-2xl font-bold mb-5">Connect with other users!</p>
            

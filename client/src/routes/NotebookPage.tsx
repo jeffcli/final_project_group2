@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 import CalendarSection from "../components/CalendarSection";
 import EntriesList from "../components/EntriesList";
 import JournalEntryForm from "../components/JournalEntryForm";
@@ -6,6 +6,7 @@ import JournalEntryForm from "../components/JournalEntryForm";
 interface Entry {
     title: string;
     text: string;
+    dateCreated: string;
 }
 
 export default function NotebookPage() {
@@ -13,7 +14,6 @@ export default function NotebookPage() {
     const [text, setText] = useState<string>('');
     const [entries, setEntries] = useState<{ [key: string]: Entry[] }>({});
     const [date, setDate] = useState<Date>(new Date());
-    const [isTyping, setIsTyping] = useState<boolean>(false);
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
     const [expandedEntryIndex, setExpandedEntryIndex] = useState<number | null>(null);
 
@@ -21,15 +21,20 @@ export default function NotebookPage() {
         e.preventDefault();
         const dateString = date.toISOString().split('T')[0];
         if (title.trim() && text.trim()) {
+            const newEntry = {
+                title,
+                text,
+                dateCreated: new Date().toLocaleString(),
+            };
             setEntries(prevEntries => {
                 const newEntries = { ...prevEntries };
                 if (!newEntries[dateString]) {
                     newEntries[dateString] = [];
                 }
                 if (editingIndex !== null) {
-                    newEntries[dateString][editingIndex] = { title, text };
+                    newEntries[dateString][editingIndex] = newEntry;
                 } else {
-                    newEntries[dateString].push({ title, text });
+                    newEntries[dateString].push(newEntry);
                 }
                 return newEntries;
             });
@@ -40,43 +45,13 @@ export default function NotebookPage() {
     const resetForm = () => {
         setTitle('');
         setText('');
-        setIsTyping(false);
         setEditingIndex(null);
     };
 
-    const handleDateChange = (newDate: Date) => {
-        setDate(newDate);
+    const handleDateChange = (day: Date) => {
+        setDate(day);
         resetForm();
         setExpandedEntryIndex(null);
-    };
-
-    const handleDeleteEntry = (entryIndex: number) => {
-        const dateString = date.toISOString().split('T')[0];
-        setEntries(prevEntries => {
-            const newEntries = { ...prevEntries };
-            if (newEntries[dateString]) {
-                newEntries[dateString] = newEntries[dateString].filter((_, index) => index !== entryIndex);
-                if (newEntries[dateString].length === 0) {
-                    delete newEntries[dateString];
-                }
-            }
-            return newEntries;
-        });
-    };
-
-    const toggleEntry = (index: number) => {
-        setExpandedEntryIndex(expandedEntryIndex === index ? null : index);
-    };
-
-    const handleEditEntry = (index: number, newTitle: string, newText: string) => {
-        const dateString = date.toISOString().split('T')[0];
-        setEntries(prevEntries => {
-            const newEntries = { ...prevEntries };
-            if (newEntries[dateString] && newEntries[dateString][index]) {
-                newEntries[dateString][index] = { title: newTitle, text: newText };
-            }
-            return newEntries;
-        });
     };
 
     const dateString = date.toISOString().split('T')[0];
@@ -85,35 +60,55 @@ export default function NotebookPage() {
     return (
         <div className="max-w-5xl mx-auto mt-10 p-6">
             <div className="flex">
-
-                <div className="flex-1 max-w-1/2 p-4">
+                <div className="flex-1 p-4">
                     <JournalEntryForm
                         title={title}
                         text={text}
                         setTitle={setTitle}
                         setText={setText}
                         handleSubmit={handleSubmit}
-                        isTyping={isTyping}
                     />
                 </div>
-
-
-                <div className="flex-1 max-w-1/2 p-4">
-                    <CalendarSection date={date} handleDateChange={handleDateChange} />
+                <div className="flex-1 p-4">
+                    <CalendarSection
+                        date={date}
+                        handleDateChange={handleDateChange}
+                    />
                 </div>
             </div>
-
-            {/* Entries List below Calendar */}
             <div className="mt-8">
                 <EntriesList
                     entries={todayEntries}
+                    expandedEntryIndex={expandedEntryIndex}
+                    toggleEntry={setExpandedEntryIndex}
                     editingIndex={editingIndex}
                     setEditingIndex={setEditingIndex}
-                    handleEditEntry={handleEditEntry}
-                    handleDeleteEntry={handleDeleteEntry}
-                    expandedEntryIndex={expandedEntryIndex}
-                    toggleEntry={toggleEntry}
-
+                    handleEditEntry={(index: number, newTitle: string, newText: string) => {
+                        const updatedEntry = {
+                            title: newTitle,
+                            text: newText,
+                            dateCreated: todayEntries[index].dateCreated,
+                        };
+                        setEntries(prevEntries => {
+                            const newEntries = { ...prevEntries };
+                            if (newEntries[dateString]) {
+                                newEntries[dateString][index] = updatedEntry;
+                            }
+                            return newEntries;
+                        });
+                    }}
+                    handleDeleteEntry={(index: number) => {
+                        setEntries(prevEntries => {
+                            const newEntries = { ...prevEntries };
+                            if (newEntries[dateString]) {
+                                newEntries[dateString] = newEntries[dateString].filter((_, i) => i !== index);
+                                if (newEntries[dateString].length === 0) {
+                                    delete newEntries[dateString];
+                                }
+                            }
+                            return newEntries;
+                        });
+                    }}
                 />
             </div>
         </div>
