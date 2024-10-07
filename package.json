@@ -8,8 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:backend": "cd server && tsx server.ts",
     "start:frontend": "cd client && npm run dev",
-    "build:deployment":"cd client && npm run build && cd ../server && npm run build", 
-    "start:deployment":"npm run build:deployment && cd server && npm start",
+    "build:deployment": "cd client && npm run build && cd ../server && npm run build",
+    "start:deployment": "npm run build:deployment && cd server && npm start",
     "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\" "
   },
   "engines": {
@@ -18,12 +18,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.7.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
     "mongodb": "^6.9.0",
     "mongoose": "^8.7.0",
-    "serve": "^14.2.3"
+    "serve": "^14.2.3",
+    "sonner": "^1.5.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
