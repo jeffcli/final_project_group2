@@ -38,19 +38,30 @@ import { makeProtectedGetRequest } from "@/utils/makeProtectedGetRequest";
     const [users, setUsers] = useState<string[]>([]); 
     const [modalOpen, setModalOpen] = useState<boolean>(false); 
     const [clickedName, setClickedName] = useState<string>(''); 
+    const [fetched, setFetched] = useState<boolean>(false); 
+
 
     const {user, getAccessTokenSilently} = useAuth0(); 
 
+
     useEffect(() => { 
         const makeReq = async () => { 
-            const token = await getAccessTokenSilently(); 
+            if(!fetched){
+                const token = await getAccessTokenSilently(); 
             const data = await makeProtectedGetRequest('/api/getUsers',token ); 
             console.log(data.data); 
             setUsers(data.data); 
+            setFetched(true); 
+            }
+            else{
+                return; 
+            }
 
         }
         makeReq().then()
-    }, [window]); 
+    }, [ users]); 
+
+
     const {setFriends} = useFriendsContext(); 
     const [open, setOpen] = useState<boolean>(false); 
     const [value, setValue] = useState<string>(''); 
@@ -86,6 +97,9 @@ import { makeProtectedGetRequest } from "@/utils/makeProtectedGetRequest";
         toast.success('Friend Added!'); 
         console.log("data is", data.data[0].friends); 
         setFriends(data.data[0].friends); 
+        const newUsers = users.filter((item) => item!=clickedName); 
+        setUsers(newUsers); 
+        
         
     }
 
