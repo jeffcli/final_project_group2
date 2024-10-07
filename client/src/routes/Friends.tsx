@@ -24,7 +24,6 @@ export const Friends = () => {
             }; 
 
             const data = await MakeProtectedPostRequest('/api/getFriends',toFetch, token); 
-            console.log("why", (data.data[0].friends)); 
             setFriends(data.data[0].friends);
             setFetched
             setFetched(true);
@@ -57,7 +56,6 @@ export const Friends = () => {
                    
                 })}
                 
-                <FriendComponent name="Jeffrey Li" photoURL="" relation="Booch"/>
             </div>        
         </div>
            

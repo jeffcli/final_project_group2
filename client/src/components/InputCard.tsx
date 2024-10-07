@@ -23,18 +23,54 @@ import {
   import photo from "../assets/default-photo.jpeg"; 
   import { Input } from "@/components/ui/input"
   import axios from 'axios'; 
+interface Friend{
+    name:string, 
+    relationship:string
+}
+import {AddFriendModal} from './AddFriendModal'; 
 
-
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "./ui/button"
 import { useAuth0 } from "@auth0/auth0-react";
 import { MakeProtectedPostRequest } from "@/utils/makeProtectedPostRequest";
 import { toast } from "sonner";
 import { FriendsProvider, useFriendsContext } from "@/contexts/FriendsContext";
+import { makeProtectedGetRequest } from "@/utils/makeProtectedGetRequest";
   export const InputCard = () => { 
-    const {user} = useAuth0(); 
-    const {setFriends} = useFriendsContext(); 
-    const { getAccessTokenSilently } = useAuth0();
+
+    const [users, setUsers] = useState<string[]>([]); 
+    const [modalOpen, setModalOpen] = useState<boolean>(false); 
+    const [clickedName, setClickedName] = useState<string>(''); 
+    const [fetched, setFetched] = useState<boolean>(false); 
+    const [parsed, setParsed] = useState<boolean>(false); 
+    const [allUsers, setAllUsers] = useState<string[]>([]); 
+
+
+
+    const {user, getAccessTokenSilently} = useAuth0(); 
+
+    const {setFriends, friends} = useFriendsContext(); 
+
+    useEffect(() => { 
+        const makeReq = async () => { 
+            if(!fetched){
+                const token = await getAccessTokenSilently(); 
+            const data = await makeProtectedGetRequest('/api/getUsers',token ); 
+            setUsers(data.data); 
+            setAllUsers(data.data); 
+
+            setFetched(true); 
+            }
+            else{
+                return; 
+            }
+
+        }
+        makeReq().then()
+    }, [ users, friends]);
+
+
+
     const [open, setOpen] = useState<boolean>(false); 
     const [value, setValue] = useState<string>(''); 
     const [relationship, setRelationship] = useState<string>(''); 
@@ -52,38 +88,49 @@ import { FriendsProvider, useFriendsContext } from "@/contexts/FriendsContext";
         const token = await getAccessTokenSilently(); 
         const data = await MakeProtectedPostRequest('/api/addFriend', friendItem, token); 
         toast.success('Friend Added!'); 
-        console.log("data is", data.data[0].friends); 
         setFriends(data.data[0].friends); 
         
 
     
     }
-    const options = [
-        {
-            value:"Dante Giles", 
-            label:"Dante Giles"
-        }, 
-        {
-            value:"Carter Moore", 
-            label:"Carter Moore"
-        },  
-        {
-            value:"Vivek Jagadeesh", 
-            label:"Vivek Jagadeesh"
-        }, 
-        {
-            value:"Jack Rooney", 
-            label: "Jack Rooney"
-        }, 
-        {
-            value: "Seth McGowan", 
-            label:"Seth McGowan"
-        }, 
-        {
-            value:"Ace Beattie", 
-            label: "Ace Beattie"
+    const handleSubmitModal = async (toAdd:string, relationship:string ) => { 
+        const friendItem = {
+            "createdBy": user!.name, 
+            "toAdd": toAdd,
+            "relationship":relationship, 
+        }; 
+        const token = await getAccessTokenSilently(); 
+        const data = await MakeProtectedPostRequest('/api/addFriend', friendItem, token); 
+        // toast.success('Friend Added!'); 
+        setFriends(data.data[0].friends); 
+        const newUsers = users.filter((item) => item!=clickedName); 
+        setUsers(newUsers); 
+        
+        
+    }
+    useEffect(() => {
+
+        if(users.length && friends.length && !parsed){
+            const names:string[] = []; 
+            for(let i = 0; i < friends.length; i++){
+                names.push((friends[i] as Friend).name)
+            }
+            //now we filter 
+            const newUsers = users.filter((item) => !names.includes(item)); 
+            console.log("new users", newUsers); 
+            setUsers(newUsers); 
+            setParsed(true); 
         }
-      ]
+     
+        
+        
+    }, [friends, users, parsed]); 
+
+
+
+
+
+   
     return(
     <div className="h-full w-4/5 ml-5  text-center ">
         <Card className="shadow-2xl">
@@ -96,7 +143,7 @@ import { FriendsProvider, useFriendsContext } from "@/contexts/FriendsContext";
                     <Popover open={open} onOpenChange={setOpen}>
                     <PopoverTrigger asChild>
                          <Button variant="outline" role="combobox" aria-expanded={open} className = "w-80 justify-between">
-                             {value? options.find((person) => person.value === value)?.label: "Select a friend to add" }
+                             {value? users.find((person) => person === value): "Select a friend to add" }
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-80 p-0">
@@ -105,15 +152,15 @@ import { FriendsProvider, useFriendsContext } from "@/contexts/FriendsContext";
                     <CommandList>
                         <CommandEmpty>No Friends Found</CommandEmpty>
                         <CommandGroup>
-                            {options.map((person) => { 
+                            {users.map((person) => { 
                                 return(
-                                    <CommandItem key ={person.value} value = {person.value} onSelect={(selectedValue) => {
+                                    <CommandItem key ={person} value = {person} onSelect={(selectedValue) => {
                                         setValue(selectedValue === value ? "":selectedValue); 
                                         setOpen(false); 
                                     }}
                                         >
                                             <img className=" h-8 rounded-sm aspect-square object-cover mr-5 " src={photo} alt="User photo" />
-                                           {person.label}
+                                           {person}
                                     </CommandItem>
                                 )
                             })}
@@ -131,13 +178,16 @@ import { FriendsProvider, useFriendsContext } from "@/contexts/FriendsContext";
                 <p className="text-2xl font-bold mb-5">Connect with other users!</p>
            
                 <div className="text-left font-lg">
-                    {options.map((person) => { 
+                    {users.map((person) => { 
                         return(
                             <div className="flex flex-col items-start mb-2">
                                 <div className="flex flex-row flex-wrap justify-between w-full">
                                     <img className=" h-8 rounded-sm aspect-square object-cover mr-5 " src={photo} alt="Alt" />
-                                    <p className="text-lg ">{person.label}</p>
-                                    <Button className="flex ml-auto">Add friend</Button>
+                                    <p className="text-lg ">{person}</p>
+                                    <Button onClick = {() => {
+                                        setModalOpen(true)
+                                        setClickedName(person); 
+                                    }} className="flex ml-auto">Add friend</Button>
                                 </div>
                             </div>
                             
@@ -157,6 +207,7 @@ import { FriendsProvider, useFriendsContext } from "@/contexts/FriendsContext";
         
       </CardFooter>
     </Card>
+    <AddFriendModal name = {clickedName} open={modalOpen} setOpen={(state) => setModalOpen(state)} addFriend={(friend, relationship) => handleSubmitModal(friend, relationship)}/>
         </div>
     )
   }
