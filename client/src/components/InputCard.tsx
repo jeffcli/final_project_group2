@@ -24,6 +24,7 @@ import {
   import { Input } from "@/components/ui/input"
   import axios from 'axios'; 
 
+import {AddFriendModal} from './AddFriendModal'; 
 
 import { useEffect, useState } from "react"
 import { Button } from "./ui/button"
@@ -35,6 +36,9 @@ import { makeProtectedGetRequest } from "@/utils/makeProtectedGetRequest";
   export const InputCard = () => { 
 
     const [users, setUsers] = useState<string[]>([]); 
+    const [modalOpen, setModalOpen] = useState<boolean>(false); 
+    const [clickedName, setClickedName] = useState<string>(''); 
+
     const {user, getAccessTokenSilently} = useAuth0(); 
 
     useEffect(() => { 
@@ -71,6 +75,23 @@ import { makeProtectedGetRequest } from "@/utils/makeProtectedGetRequest";
 
     
     }
+    const handleSubmitModal = async (toAdd:string, relationship:string ) => { 
+        const friendItem = {
+            "createdBy": user!.name, 
+            "toAdd": toAdd,
+            "relationship":relationship, 
+        }; 
+        const token = await getAccessTokenSilently(); 
+        const data = await MakeProtectedPostRequest('/api/addFriend', friendItem, token); 
+        toast.success('Friend Added!'); 
+        console.log("data is", data.data[0].friends); 
+        setFriends(data.data[0].friends); 
+        
+    }
+
+
+
+
    
     return(
     <div className="h-full w-4/5 ml-5  text-center ">
@@ -125,7 +146,10 @@ import { makeProtectedGetRequest } from "@/utils/makeProtectedGetRequest";
                                 <div className="flex flex-row flex-wrap justify-between w-full">
                                     <img className=" h-8 rounded-sm aspect-square object-cover mr-5 " src={photo} alt="Alt" />
                                     <p className="text-lg ">{person}</p>
-                                    <Button className="flex ml-auto">Add friend</Button>
+                                    <Button onClick = {() => {
+                                        setModalOpen(true)
+                                        setClickedName(person); 
+                                    }} className="flex ml-auto">Add friend</Button>
                                 </div>
                             </div>
                             
@@ -145,6 +169,7 @@ import { makeProtectedGetRequest } from "@/utils/makeProtectedGetRequest";
         
       </CardFooter>
     </Card>
+    <AddFriendModal name = {clickedName} open={modalOpen} setOpen={(state) => setModalOpen(state)} addFriend={(friend, relationship) => handleSubmitModal(friend, relationship)}/>
         </div>
     )
   }
