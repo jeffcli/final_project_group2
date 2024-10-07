@@ -28,6 +28,8 @@ export const FriendComponent = (props:props) => {
         console.log("removed", data.data); 
         setFriends(data.data); 
         toast.success(`Removed ${props.name}`); 
+        location.reload(); 
+        
         
         return; 
     }

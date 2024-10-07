@@ -23,7 +23,10 @@ import {
   import photo from "../assets/default-photo.jpeg"; 
   import { Input } from "@/components/ui/input"
   import axios from 'axios'; 
-
+interface Friend{
+    name:string, 
+    relationship:string
+}
 import {AddFriendModal} from './AddFriendModal'; 
 
 import { useEffect, useState } from "react"
@@ -39,10 +42,14 @@ import { makeProtectedGetRequest } from "@/utils/makeProtectedGetRequest";
     const [modalOpen, setModalOpen] = useState<boolean>(false); 
     const [clickedName, setClickedName] = useState<string>(''); 
     const [fetched, setFetched] = useState<boolean>(false); 
+    const [parsed, setParsed] = useState<boolean>(false); 
+    const [allUsers, setAllUsers] = useState<string[]>([]); 
+
 
 
     const {user, getAccessTokenSilently} = useAuth0(); 
 
+    const {setFriends, friends} = useFriendsContext(); 
 
     useEffect(() => { 
         const makeReq = async () => { 
@@ -51,6 +58,8 @@ import { makeProtectedGetRequest } from "@/utils/makeProtectedGetRequest";
             const data = await makeProtectedGetRequest('/api/getUsers',token ); 
             console.log(data.data); 
             setUsers(data.data); 
+            setAllUsers(data.data); 
+
             setFetched(true); 
             }
             else{
@@ -59,10 +68,16 @@ import { makeProtectedGetRequest } from "@/utils/makeProtectedGetRequest";
 
         }
         makeReq().then()
-    }, [ users]); 
+    }, [ users, friends]);
+    useEffect(() => { 
+        setParsed(false); 
+        console.log("updating!"); 
 
 
-    const {setFriends} = useFriendsContext(); 
+    }, [friends])
+
+
+
     const [open, setOpen] = useState<boolean>(false); 
     const [value, setValue] = useState<string>(''); 
     const [relationship, setRelationship] = useState<string>(''); 
@@ -94,7 +109,7 @@ import { makeProtectedGetRequest } from "@/utils/makeProtectedGetRequest";
         }; 
         const token = await getAccessTokenSilently(); 
         const data = await MakeProtectedPostRequest('/api/addFriend', friendItem, token); 
-        toast.success('Friend Added!'); 
+        // toast.success('Friend Added!'); 
         console.log("data is", data.data[0].friends); 
         setFriends(data.data[0].friends); 
         const newUsers = users.filter((item) => item!=clickedName); 
@@ -102,6 +117,26 @@ import { makeProtectedGetRequest } from "@/utils/makeProtectedGetRequest";
         
         
     }
+    useEffect(() => {
+        console.log("foundations webware time"); 
+
+        if(users.length && friends.length && !parsed){
+            const names:string[] = []; 
+            console.log(users, friends); 
+            for(let i = 0; i < friends.length; i++){
+                names.push((friends[i] as Friend).name)
+            }
+            //now we filter 
+            const newUsers = users.filter((item) => !names.includes(item)); 
+            console.log("new users", newUsers); 
+            setUsers(newUsers); 
+            setParsed(true); 
+        }
+     
+        
+        
+    }, [friends, users, parsed]); 
+
 
 
 
