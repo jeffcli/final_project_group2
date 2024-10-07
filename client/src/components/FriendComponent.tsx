@@ -8,10 +8,30 @@ interface props{
 import { Separator } from "@/components/ui/separator"
 import { Progress } from "./ui/progress";
 import { Button } from "./ui/button";
-
+import { useAuth0 } from "@auth0/auth0-react";
+import { MakeProtectedPostRequest } from "@/utils/makeProtectedPostRequest";
+import { useFriendsContext } from "@/contexts/FriendsContext";
 
 export const FriendComponent = (props:props) => { 
- 
+    const {user, getAccessTokenSilently} = useAuth0(); 
+    const {setFriends} = useFriendsContext(); 
+    
+    const handleDelete = async (toRemove:string) => { 
+        const token = await getAccessTokenSilently(); 
+        //start by building the JSON 
+        const removeUser = {
+            toRemove: toRemove, 
+            userName:user!.name
+        }; 
+        const data = await MakeProtectedPostRequest('/api/removeFriend', removeUser, token ); 
+        console.log("removed", data.data); 
+        setFriends(data.data); 
+        
+        
+
+
+        return; 
+    }
 
     return(
         <div>
@@ -26,7 +46,7 @@ export const FriendComponent = (props:props) => {
 
                     <Progress value={10} className=" ml-10 w-36"/> 
                     <Button className="ml-5" > Update Friend </Button>
-                    <Button className="ml-5 items-c" variant="destructive"> Remove Friend </Button>
+                    <Button onClick={() => handleDelete(props.name)} className="ml-5 items-c" variant="destructive"> Remove Friend </Button>
                 </div>
             
             </div>

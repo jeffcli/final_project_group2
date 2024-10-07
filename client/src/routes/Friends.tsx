@@ -57,7 +57,6 @@ export const Friends = () => {
                    
                 })}
                 
-                <FriendComponent name="Jeffrey Li" photoURL="" relation="Booch"/>
             </div>        
         </div>
            
