@@ -11,7 +11,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { MakeProtectedPostRequest } from "@/utils/makeProtectedPostRequest";
 import { useFriendsContext } from "@/contexts/FriendsContext";
 import { useState } from "react";
-import { UpdateFriendModal } from "./updateFriendModal";
+import { UpdateFriendModal } from "./UpdateFriendModal";
 import { toast } from "sonner";
 export const FriendComponent = (props:props) => { 
     const [modalOpen, setModalOpen] = useState<boolean>(false); 
