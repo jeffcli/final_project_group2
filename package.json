@@ -8,9 +8,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:backend": "cd server && tsx server.ts",
     "start:frontend": "cd client && npm run dev",
-    "build:deployment": "cd client && npm run build && cd ../server && npm run build",
+    "build:deployment": "tsc",
     "start:deployment": "npm run build:deployment && cd server && npm start",
     "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\" "
+    
   },
   "engines": {
     "node": "20.11.1"
