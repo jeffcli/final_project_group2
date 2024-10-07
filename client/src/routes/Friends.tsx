@@ -1,14 +1,43 @@
 import { FriendComponent } from "@/components/FriendComponent"
 import { InputCard } from "@/components/InputCard"
 import { useFriendsContext } from "@/contexts/FriendsContext"
-
+import { makeProtectedGetRequest } from "@/utils/makeProtectedGetRequest"
+import { MakeProtectedPostRequest } from "@/utils/makeProtectedPostRequest"
+import { useAuth0 } from "@auth0/auth0-react"
+import { useEffect, useState } from "react"
 type Friend = {
     name:string, 
-    relation:string
+    relationship:string
 }
 export const Friends = () => { 
-    const {friends} = useFriendsContext(); 
+    const {friends, setFriends} = useFriendsContext(); 
+    const {user, isLoading, getAccessTokenSilently} = useAuth0(); 
+    const [fetched, setFetched] = useState<boolean>(false); 
     
+    useEffect(() =>{
+       const makeReq = async () =>{
+        if(!isLoading){
+            console.log("user is", user); 
+            const token = await getAccessTokenSilently(); 
+            const toFetch = {
+                userName: user!.name
+            }; 
+
+            const data = await MakeProtectedPostRequest('/api/getFriends',toFetch, token); 
+            console.log("why", (data.data[0].friends)); 
+            setFriends(data.data[0].friends);
+            setFetched
+            setFetched(true);
+            return  
+        }
+        if(fetched){
+            return; 
+        }
+       }
+       makeReq().then(); 
+      
+
+    }, [window]); 
     return(
         <>
        
@@ -23,7 +52,7 @@ export const Friends = () => {
                 {friends.map((item) =>{ 
                 
                         return(
-                            <FriendComponent name = {(item as Friend).name} photoURL="" relation={(item as Friend).relation}/>
+                            <FriendComponent name = {(item as Friend).name} photoURL="" relation={(item as Friend).relationship}/>
                         )
                    
                 })}
