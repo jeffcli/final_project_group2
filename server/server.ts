@@ -9,7 +9,7 @@ import { auth } from "express-oauth2-jwt-bearer";
 import getUsers from './routes/getUsers'; 
 
 
-dotenv.config({path:"../.env"}); 
+    // dotenv.config({path:"../.env"}); 
 import mongoose from 'mongoose'; 
 import express from 'express'; 
 import cors from 'cors'; 
@@ -17,7 +17,11 @@ import { get } from 'http';
 mongoose.connect(process.env.MONGO_URI || "").then(() => console.log("MongoDB connected!")).catch(() => console.log("Could not connect to MongoDB")); 
 const app = express(); 
 console.log(path.join(__dirname)); 
+
 app.use(express.static(path.join(__dirname, '../client/dist')))
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+  });
 app.use(express.urlencoded({extended:true})); 
 app.use(cors({
     origin:'http://localhost:3000/',
