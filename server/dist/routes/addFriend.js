@@ -40,7 +40,6 @@ router.post('/api/addFriend', async (req, res) => {
                 relationship: relationship,
             };
             currentFriends[0].friends.push(friendObj);
-            console.log(currentFriends[0].friends);
             await model_1.default.findOneAndUpdate({ userName: createdBy }, { friends: currentFriends[0].friends });
             const newFriends = await model_1.default.find({ userName: createdBy });
             console.log(newFriends);
