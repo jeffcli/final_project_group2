@@ -2,6 +2,8 @@
 import dotenv from 'dotenv'; 
 import addFriend from "./routes/addFriend"; 
 import getFriends from "./routes/getFriends"; 
+import getHabits from "./routes/getHabits";
+import addHabit from "./routes/addHabit";
 import path from 'path';
 import { auth } from "express-oauth2-jwt-bearer";
 
@@ -11,6 +13,8 @@ import mongoose from 'mongoose';
 import express from 'express'; 
 import cors from 'cors'; 
 import { get } from 'http';
+import deleteHabit from './routes/deleteHabit';
+import updateHabit from './routes/updateHabit';
 mongoose.connect(process.env.MONGO_URI || "").then(() => console.log("MongoDB connected!")).catch(() => console.log("Could not connect to MongoDB")); 
 const app = express(); 
 console.log(path.join(__dirname)); 
@@ -32,6 +36,10 @@ app.get('/api/health', async (req, res) => {
 // }))
 app.use(addFriend);  
 app.use(getFriends); 
+app.use(getHabits);
+app.use(addHabit);
+app.use(deleteHabit);
+app.use(updateHabit);
 app.disable('etag'); 
 app.listen(process.env.PORT||3001, () => { 
     console.log(`App on ${process.env.PORT}`); 
