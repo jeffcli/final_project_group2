@@ -21,10 +21,11 @@ import updateHabit from './routes/updateHabit';
 mongoose.connect(process.env.MONGO_URI || "").then(() => console.log("MongoDB connected!")).catch(() => console.log("Could not connect to MongoDB")); 
 const app = express(); 
 console.log(path.join(__dirname)); 
-app.use(express.static(path.join(__dirname, '../client/dist')))
+app.use(express.static(path.join(__dirname, '../client/dist')));
+
 app.use(express.urlencoded({extended:true})); 
 app.use(cors({
-    origin:'http://localhost:3000/',
+    origin:'https://finaldeploymentwebware-c99517e0c12a.herokuapp.com/',
     credentials:true, 
 })); 
 app.use(express.json()); 
@@ -46,7 +47,11 @@ app.use(updateHabit);
 app.use(removeFriend); 
 app.use(updateFriend); 
 app.use(getUsers); 
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
+});
 app.disable('etag'); 
+
 app.listen(process.env.PORT||3001, () => { 
     console.log(`App on ${process.env.PORT}`); 
 }); 
