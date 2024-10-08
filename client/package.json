@@ -25,6 +25,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
+    "final_project_group2": "file:..",
     "lucide-react": "^0.447.0",
     "react": "^18.3.1",
     "react-calendar": "^5.0.0",

@@ -11,7 +11,7 @@ import { auth } from "express-oauth2-jwt-bearer";
 import getUsers from './routes/getUsers'; 
 
 
-dotenv.config({path:"../.env"}); 
+// dotenv.config({path:"../.env"}); 
 import mongoose from 'mongoose'; 
 import express from 'express'; 
 import cors from 'cors'; 
