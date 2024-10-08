@@ -1,7 +1,9 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import CalendarSection from "../components/CalendarSection";
 import EntriesList from "../components/EntriesList";
 import JournalEntryForm from "../components/JournalEntryForm";
+import {MakeProtectedPostRequest} from "@/utils/makeProtectedPostRequest.ts";
+import {useAuth0} from "@auth0/auth0-react";
 
 interface Entry {
     title: string;
@@ -10,12 +12,56 @@ interface Entry {
 }
 
 export default function NotebookPage() {
+    const {user, getAccessTokenSilently} = useAuth0();
+    const [userEntries, setUserEntries] = useState<[]>([]);
     const [title, setTitle] = useState<string>('');
     const [text, setText] = useState<string>('');
     const [entries, setEntries] = useState<{ [key: string]: Entry[] }>({});
     const [date, setDate] = useState<Date>(new Date());
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
     const [expandedEntryIndex, setExpandedEntryIndex] = useState<number | null>(null);
+
+    const getEntries = async () => {
+        try {
+            const token = await getAccessTokenSilently();
+
+            const toFetch = {
+                userName: user!.name
+            };
+
+            const data = await MakeProtectedPostRequest('/api/getEntry',toFetch, token);
+            setUserEntries(data.data);
+        } catch (e) {
+            console.log("Error getting entries: ", e);
+        }
+    }
+
+    const updateEntry = async (habitId: string, done: boolean) => {
+        try {
+            const token = await getAccessTokenSilently();
+
+            console.log(habitId);
+            console.log(done);
+            const toUpdate = {
+                _id: habitId,
+                done: done,
+                userName: user!.name
+            };
+
+            const data = await MakeProtectedPostRequest('/api/updateEntry',toUpdate, token);
+            setUserEntries(data.data);
+        } catch (e) {
+            console.log("Error getting habits: ", e);
+        }
+    }
+
+    useEffect(() => {
+        getEntries().then();
+    }, [window])
+
+
+
+
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -62,6 +108,7 @@ export default function NotebookPage() {
             <div className="flex">
                 <div className="flex-1 p-4">
                     <JournalEntryForm
+                        entries = {getEntries}
                         title={title}
                         text={text}
                         setTitle={setTitle}

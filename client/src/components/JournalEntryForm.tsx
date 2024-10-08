@@ -1,7 +1,7 @@
 import { Button } from "../components/ui/button";
 import {useAuth0} from "@auth0/auth0-react";
 import {MakeProtectedPostRequest} from "@/utils/makeProtectedPostRequest.ts";
-import {useState} from "react";
+// import {useState} from "react";
 
 interface JournalEntryFormProps {
     title: string;
@@ -9,10 +9,11 @@ interface JournalEntryFormProps {
     setTitle: (title: string) => void;
     setText: (text: string) => void;
     handleSubmit: (e: React.FormEvent) => void;
+    entries: {getEntries: () => void}
 
 }
 
-    const JournalEntryForm: React.FC<JournalEntryFormProps> = ({title, text, setTitle, setText, handleSubmit}) => {
+    const JournalEntryForm: React.FC<JournalEntryFormProps> = ({entries, title, text, setTitle, setText, handleSubmit}) => {
         const {user, getAccessTokenSilently} = useAuth0();
         const addEntry = async () => {
             try {
@@ -25,7 +26,7 @@ interface JournalEntryFormProps {
                 };
 
                 const data = await MakeProtectedPostRequest('/api/addEntry', bodyData, token);
-                props.getEntries();
+                entries.getEntries();
             } catch (e) {
                 console.log("Error adding entry: ", e);
             }
@@ -54,7 +55,7 @@ interface JournalEntryFormProps {
                         placeholder={"Write your journal entry..."}
                     />
                     </div>
-                    <Button type="submit"  className="mt-2 px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700">
+                    <Button type="submit" onClick={addEntry} className="mt-2 px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700">
                         {'Add Entry'}
                     </Button>
                 </form>
@@ -62,4 +63,4 @@ interface JournalEntryFormProps {
         );
 
 }
-export default function JournalEntryForm();
+export default JournalEntryForm;
