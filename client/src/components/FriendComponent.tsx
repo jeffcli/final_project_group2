@@ -1,5 +1,4 @@
 import photo from "../assets/default-photo.jpeg"; 
-
 interface props{
     name:string; 
     photoURL:string; 
@@ -8,11 +7,29 @@ interface props{
 import { Separator } from "@/components/ui/separator"
 import { Progress } from "./ui/progress";
 import { Button } from "./ui/button";
-
-
+import { useAuth0 } from "@auth0/auth0-react";
+import { MakeProtectedPostRequest } from "@/utils/makeProtectedPostRequest";
+import { useFriendsContext } from "@/contexts/FriendsContext";
+import { useState } from "react";
+import { UpdateFriendModal } from "./UpdateFriendModal";
+import { toast } from "sonner";
 export const FriendComponent = (props:props) => { 
- 
-
+    const [modalOpen, setModalOpen] = useState<boolean>(false); 
+    const {user, getAccessTokenSilently} = useAuth0(); 
+    const {setFriends} = useFriendsContext(); 
+    const handleDelete = async (toRemove:string) => { 
+        const token = await getAccessTokenSilently(); 
+        //start by building the JSON 
+        const removeUser = {
+            toRemove: toRemove, 
+            userName:user!.name
+        }; 
+        const data = await MakeProtectedPostRequest('/api/removeFriend', removeUser, token ); 
+        setFriends(data.data); 
+        toast.success(`Removed ${props.name}`); 
+    
+        return; 
+    }
     return(
         <div>
             <Separator/>
@@ -25,11 +42,12 @@ export const FriendComponent = (props:props) => {
                     <div className="flex ml-auto items-center">
 
                     <Progress value={10} className=" ml-10 w-36"/> 
-                    <Button className="ml-5" > Update Friend </Button>
-                    <Button className="ml-5 items-c" variant="destructive"> Remove Friend </Button>
+                    <Button  onClick={() => setModalOpen(true )} className="ml-5" > Update Friend </Button>
+                    <Button onClick={() => handleDelete(props.name)} className="ml-5 items-c" variant="destructive"> Remove Friend </Button>
                 </div>
             
             </div>
+            <UpdateFriendModal open={modalOpen} name = {props.name} setOpen={(state) => setModalOpen(state)} deleteFriend={handleDelete}/>
         </div> 
     )
 

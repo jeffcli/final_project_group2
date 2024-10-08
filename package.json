@@ -6,10 +6,11 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/dist/server.js",
     "start:backend": "cd server && tsx server.ts",
     "start:frontend": "cd client && npm run dev",
     "build:deployment": "cd client && npm run build && cd ../server && npm run build",
-    "start:deployment": "npm run build:deployment && cd server && npm start",
+    "start:deployment": "cd server && npm run build",
     "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\" "
   },
   "engines": {
@@ -32,6 +33,7 @@
     "@types/node": "^22.7.4",
     "autoprefixer": "^10.4.20",
     "concurrently": "^9.0.1",
+    "cross-env": "^7.0.3",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.13",
     "ts-node": "^10.9.2",

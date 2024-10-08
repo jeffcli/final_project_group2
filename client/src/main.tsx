@@ -9,6 +9,7 @@ import { AuthenticationGuard } from './components/AuthenticationGuard.tsx';
 import Notebook from "@/routes/NotebookPage.tsx";
 import { Toaster, toast } from 'sonner'
 import { FriendsProvider } from './contexts/FriendsContext.tsx';
+import Habits from './routes/Habits.tsx';
 const router = createBrowserRouter([
   { // All routes for logged in users should be children of this route
     path: "/",
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: "journal",
         element: <AuthenticationGuard component={Notebook}/>,
+      },
+      {
+        path: "habits",
+        element: <AuthenticationGuard component={Habits}/>,
       },
 
 
