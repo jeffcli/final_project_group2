@@ -4,8 +4,11 @@ import addFriend from "./routes/addFriend";
 import getFriends from "./routes/getFriends"; 
 import getHabits from "./routes/getHabits";
 import addHabit from "./routes/addHabit";
+import updateFriend from './routes/updateFriend'; 
 import path from 'path';
+import removeFriend from './routes/removeFriend'; 
 import { auth } from "express-oauth2-jwt-bearer";
+import getUsers from './routes/getUsers'; 
 
 
 dotenv.config({path:"../.env"}); 
@@ -40,6 +43,9 @@ app.use(getHabits);
 app.use(addHabit);
 app.use(deleteHabit);
 app.use(updateHabit);
+app.use(removeFriend); 
+app.use(updateFriend); 
+app.use(getUsers); 
 app.disable('etag'); 
 app.listen(process.env.PORT||3001, () => { 
     console.log(`App on ${process.env.PORT}`); 
