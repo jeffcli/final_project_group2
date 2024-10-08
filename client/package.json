@@ -24,6 +24,8 @@
     "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
     "lucide-react": "^0.447.0",
+    "mongoose": "^8.7.0",
+    "moongoose": "^0.0.5",
     "react": "^18.3.1",
     "react-calendar": "^5.0.0",
     "react-day-picker": "^8.10.1",

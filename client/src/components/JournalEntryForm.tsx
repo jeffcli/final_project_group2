@@ -6,13 +6,13 @@ interface JournalEntryFormProps {
     setTitle: (title: string) => void;
     setText: (text: string) => void;
     handleSubmit: (e: React.FormEvent) => void;
-    isTyping: boolean;
+
 }
 
-const JournalEntryForm: React.FC<JournalEntryFormProps> = ({ title, text, setTitle, setText, handleSubmit, isTyping }) => {
+const JournalEntryForm: React.FC<JournalEntryFormProps> = ({ title, text, setTitle, setText, handleSubmit }) => {
     return (
         <div className="bg-white shadow-lg rounded-lg p-6 mb-6">
-            <h1 className="text-center text-2xl font-bold mb-4">Journal Entry</h1>
+            <h1 className="text-center text-2xl font-bold mb-4">Add a journal entry</h1>
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
                     <input
@@ -30,7 +30,7 @@ const JournalEntryForm: React.FC<JournalEntryFormProps> = ({ title, text, setTit
                         onChange={(e) => {
                             setText(e.target.value);
                         }}
-                        placeholder={!isTyping ? "Write your journal entry..." : ""}
+                        placeholder={"Write your journal entry..."}
                     />
                 </div>
                 <Button type="submit" className="mt-2 px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700">
