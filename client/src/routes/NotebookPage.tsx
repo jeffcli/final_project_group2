@@ -67,7 +67,7 @@ export default function NotebookPage() {
                         setTitle={setTitle}
                         setText={setText}
                         handleSubmit={handleSubmit}
-                    />
+                     />
                 </div>
                 <div className="flex-1 p-4">
                     <CalendarSection
