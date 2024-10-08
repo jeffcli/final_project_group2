@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "tsx server.ts",
-    "build": "node dist/server.js",
+    "build": "tsx server.ts",
     "start": "node ./dist/server.js"
   },
   "compilerOptions": {
