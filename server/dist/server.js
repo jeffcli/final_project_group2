@@ -22,10 +22,10 @@ const updateHabit_1 = __importDefault(require("./routes/updateHabit"));
 mongoose_1.default.connect(process.env.MONGO_URI || "").then(() => console.log("MongoDB connected!")).catch(() => console.log("Could not connect to MongoDB"));
 const app = (0, express_1.default)();
 console.log(path_1.default.join(__dirname));
-app.use(express_1.default.static(path_1.default.join(__dirname, '../client/dist')));
+app.use(express_1.default.static(path_1.default.join(__dirname, '../../client/dist')));
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use((0, cors_1.default)({
-    origin: 'http://localhost:3000/',
+    origin: 'https://finaldeploymentwebware-c99517e0c12a.herokuapp.com/',
     credentials: true,
 }));
 app.use(express_1.default.json());
@@ -47,6 +47,11 @@ app.use(updateHabit_1.default);
 app.use(removeFriend_1.default);
 app.use(updateFriend_1.default);
 app.use(getUsers_1.default);
+app.get('*', (req, res) => {
+    const filePath = path_1.default.join(__dirname, '../../client/dist', 'index.html');
+    console.log('Serving file:', filePath);
+    res.sendFile(filePath);
+});
 app.disable('etag');
 app.listen(process.env.PORT || 3001, () => {
     console.log(`App on ${process.env.PORT}`);

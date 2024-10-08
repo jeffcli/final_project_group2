@@ -21,7 +21,7 @@ import updateHabit from './routes/updateHabit';
 mongoose.connect(process.env.MONGO_URI || "").then(() => console.log("MongoDB connected!")).catch(() => console.log("Could not connect to MongoDB")); 
 const app = express(); 
 console.log(path.join(__dirname)); 
-app.use(express.static(path.join(__dirname, '../client/dist')));
+app.use(express.static(path.join(__dirname, '../../client/dist')));
 
 app.use(express.urlencoded({extended:true})); 
 app.use(cors({
@@ -48,7 +48,9 @@ app.use(removeFriend);
 app.use(updateFriend); 
 app.use(getUsers); 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
+    const filePath = path.join(__dirname, '../../client/dist', 'index.html');
+    console.log('Serving file:', filePath);
+    res.sendFile(filePath);
 });
 app.disable('etag'); 
 
