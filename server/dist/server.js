@@ -49,7 +49,6 @@ app.use(updateFriend_1.default);
 app.use(getUsers_1.default);
 app.get('*', (req, res) => {
     const filePath = path_1.default.join(__dirname, '../../client/dist', 'index.html');
-    console.log('Serving file:', filePath);
     res.sendFile(filePath);
 });
 app.disable('etag');
