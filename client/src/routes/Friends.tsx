@@ -17,7 +17,6 @@ export const Friends = () => {
     useEffect(() =>{
        const makeReq = async () =>{
         if(!isLoading){
-            console.log("user is", user); 
             const token = await getAccessTokenSilently(); 
             const toFetch = {
                 userName: user!.name

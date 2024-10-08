@@ -10,7 +10,7 @@
     "start:backend": "cd server && tsx server.ts",
     "start:frontend": "cd client && npm run dev",
     "build:deployment": "cd client && npm run build && cd ../server && npm run build",
-    "start:deployment": "npm run build:deployment && cd server && npm start",
+    "start:deployment": "cd server && npm run build",
     "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\" "
   },
   "engines": {

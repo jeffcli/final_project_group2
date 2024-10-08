@@ -34,7 +34,6 @@ export default function AddHabitForm(props: {getHabits: () => void, habits: Habi
       }; 
   
         const data = await MakeProtectedPostRequest('/api/deleteHabit', bodyData, token); 
-        console.log(data.data);
         props.getHabits();
       } catch (e) {
         console.log("Error removing habit: ", e);

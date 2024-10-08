@@ -30,7 +30,6 @@ export default function Habits() {
     }; 
 
       const data = await MakeProtectedPostRequest('/api/getHabits',toFetch, token); 
-      console.log(data.data[0]);
       setUserHabits(data.data);
     } catch (e) {
       console.log("Error getting habits: ", e);

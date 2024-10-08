@@ -29,7 +29,6 @@ export default function AddHabitForm(props: {getHabits: () => void}) {
       }; 
   
         const data = await MakeProtectedPostRequest('/api/addHabit', bodyData, token); 
-        console.log(data.data);
         props.getHabits();
       } catch (e) {
         console.log("Error adding habit: ", e);
