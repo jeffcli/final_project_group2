@@ -7,7 +7,6 @@ export default function LandingPage() {
     const {loginWithRedirect} = useAuth0(); 
 
     const handleLogin = async () => { 
-        console.log("here"); 
         await loginWithRedirect({
             appState:{
                 returnTo:'/worked'

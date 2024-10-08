@@ -38,7 +38,6 @@ router.post('/api/addFriend', async (req, res) => {
 
             (currentFriends[0].friends as Object[]).push(friendObj); 
 
-            console.log(currentFriends[0].friends); 
             await friends.findOneAndUpdate({userName:createdBy}, {friends:currentFriends[0].friends}); 
             const newFriends = await friends.find({userName:createdBy});
             console.log(newFriends); 
@@ -48,4 +47,4 @@ router.post('/api/addFriend', async (req, res) => {
        
     }    
 }); 
-export default router; 
+export default router;   
