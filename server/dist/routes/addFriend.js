@@ -7,17 +7,23 @@ const express_1 = __importDefault(require("express"));
 const model_1 = __importDefault(require("../mongoose/friends/model"));
 const router = express_1.default.Router();
 router.post('/api/addFriend', async (req, res) => {
-    const createdBy = req.body.userName;
+    const createdBy = req.body.createdBy;
     const toAdd = req.body.toAdd;
+    const relationship = req.body.relationship;
+    console.log(relationship);
     //first query the current list of friends to attach to 
     const currentFriends = await model_1.default.find({ userName: createdBy });
     if (!currentFriends.length) {
         //need to make a document 
         const friendsArr = [];
-        friendsArr.push(toAdd);
+        const friendObj = {
+            name: toAdd,
+            relationship: relationship,
+        };
+        friendsArr.push(friendObj);
         const newFriends = {
             userName: createdBy,
-            friends: friendsArr
+            friends: friendsArr,
         };
         await model_1.default.create(newFriends);
         //query the db to return all friends for this user 
@@ -29,10 +35,15 @@ router.post('/api/addFriend', async (req, res) => {
             res.json({ "status": "already included!" });
         }
         else {
-            currentFriends[0].friends.push(toAdd);
+            const friendObj = {
+                name: toAdd,
+                relationship: relationship,
+            };
+            currentFriends[0].friends.push(friendObj);
             console.log(currentFriends[0].friends);
             await model_1.default.findOneAndUpdate({ userName: createdBy }, { friends: currentFriends[0].friends });
             const newFriends = await model_1.default.find({ userName: createdBy });
+            console.log(newFriends);
             res.json(newFriends);
         }
     }

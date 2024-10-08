@@ -8,6 +8,7 @@ exports.FriendsSchema = new mongoose_1.Schema({
         required: true,
     },
     friends: {
-        type: [String],
+        type: [Object],
+        required: true,
     }
 });
