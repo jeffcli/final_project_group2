@@ -1,3 +1,4 @@
+"use strict";
 import express from 'express';
 import journal from "../mongoose/journal/model";
 import { JournalType } from '../mongoose/journal/schema';
