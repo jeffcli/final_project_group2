@@ -2,6 +2,8 @@
 import dotenv from 'dotenv'; 
 import addFriend from "./routes/addFriend"; 
 import getFriends from "./routes/getFriends"; 
+import getHabits from "./routes/getHabits";
+import addHabit from "./routes/addHabit";
 import updateFriend from './routes/updateFriend'; 
 import path from 'path';
 import removeFriend from './routes/removeFriend'; 
@@ -14,6 +16,8 @@ import mongoose from 'mongoose';
 import express from 'express'; 
 import cors from 'cors'; 
 import { get } from 'http';
+import deleteHabit from './routes/deleteHabit';
+import updateHabit from './routes/updateHabit';
 mongoose.connect(process.env.MONGO_URI || "").then(() => console.log("MongoDB connected!")).catch(() => console.log("Could not connect to MongoDB")); 
 const app = express(); 
 console.log(path.join(__dirname)); 
@@ -35,6 +39,10 @@ app.get('/api/health', async (req, res) => {
 // }))
 app.use(addFriend);  
 app.use(getFriends); 
+app.use(getHabits);
+app.use(addHabit);
+app.use(deleteHabit);
+app.use(updateHabit);
 app.use(removeFriend); 
 app.use(updateFriend); 
 app.use(getUsers); 
