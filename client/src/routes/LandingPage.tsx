@@ -9,7 +9,7 @@ export default function LandingPage() {
     const handleLogin = async () => { 
         await loginWithRedirect({
             appState:{
-                returnTo:'/worked'
+                returnTo:'/'
             }
         })
     

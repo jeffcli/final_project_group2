@@ -9,22 +9,55 @@ import journalIcon from './assets/notebook-svgrepo-com.svg'
 import moodIcon from './assets/smile-circle-svgrepo-com.svg'
 import { Button } from './components/ui/button'
 import MoodForm from './components/MoodForm'
+import { QuoteModal } from './components/quoteModal'
+import { makeProtectedGetRequest } from './utils/makeProtectedGetRequest'
 
 type wellnessStats = {
   habitsCompleted: string,
   lastJournalEntry: string,
   averageMood: string
 }
+interface quote{
+  quote:string, 
+  userName:string, 
+}
 
 function App() {
-  const [quote, setQuote] = useState<{ text: string, author: string }>({ text: 'Today is Sunday omggggg', author: 'Dante' })
+  const [quote, setQuote] = useState<{ text: string, author: string }>({ text: 'Suggest a Quote for it to appear here!', author: '' }); 
+  const [quoteModalOpen, setQuoteModalOpen] = useState<boolean>(false); 
   const [userStats, setUserStats] = useState<wellnessStats>({
     habitsCompleted: 'N/A',
     lastJournalEntry: 'N/A',
     averageMood: 'N/A'
   });
 
+   useEffect(() => { 
+    const makeRequest = async () => { 
+      const token = await getAccessTokenSilently(); 
+      const data = await makeProtectedGetRequest('/api/fetchQuotes', token); 
+      const quotes = data.data; 
+      const tail = (quotes[quotes.length - 1] as quote); 
+      setQuote({text:tail.quote, author:tail.userName}); 
+    }
+    makeRequest().then(); 
+  }, [window])
+
   const {user, getAccessTokenSilently} = useAuth0();
+  const addQuote = async (quote:string) => { 
+    const token = await getAccessTokenSilently(); 
+    const toAdd = { 
+      userName: user!.name, 
+      quote: quote
+    }; 
+    const data = await MakeProtectedPostRequest('/api/addQuote', toAdd, token ); 
+    console.log("the data is", data.data); 
+    const quotes = data.data; 
+    const tail = (quotes[quotes.length - 1] as quote); 
+    setQuote({text:tail.quote, author:tail.userName}); 
+
+   
+
+  }
 
   const updateStats = async () => {
     const stats = {
@@ -79,7 +112,7 @@ function App() {
           </p>
         </div>
         <div className="mx-auto">
-          <Button variant="link" className="text-rose-500">Suggest a Quote</Button>
+          <Button onClick = {() => setQuoteModalOpen(true)}variant="link" className="text-rose-500">Suggest a Quote</Button>
         </div>
       </div>
 
@@ -143,6 +176,10 @@ function App() {
           </div>
         </Card>
       </div>
+      {/* open:boolean;
+    setOpen: (state:boolean) => void; 
+    addQuote:  (username:string, quote:string) => void;  */}
+      <QuoteModal open={quoteModalOpen} setOpen={(state) => setQuoteModalOpen(state)} addQuote={( quote) => addQuote( quote)}/>
     </div>
     </>
   )
