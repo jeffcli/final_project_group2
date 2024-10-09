@@ -17,7 +17,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <App />,
+        element: <AuthenticationGuard component={App}/>,
       },
       {
         path:"friends",

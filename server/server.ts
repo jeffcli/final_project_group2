@@ -9,8 +9,10 @@ import path from 'path';
 import removeFriend from './routes/removeFriend'; 
 import { auth } from "express-oauth2-jwt-bearer";
 import getUsers from './routes/getUsers'; 
-
-
+import updateMood from './routes/updateMood';
+import addQuote from './routes/addQuote'; 
+import fetchQuotes from './routes/fetchQuotes'
+import getMoodForUser from "./routes/getMoodForUser"; 
 dotenv.config({path:"../.env"}); 
 import mongoose from 'mongoose'; 
 import express from 'express'; 
@@ -54,7 +56,11 @@ app.use(removeEntry);
 app.use(updateEntry);
 app.use(removeFriend); 
 app.use(updateFriend); 
+app.use(updateMood);
 app.use(getUsers); 
+app.use(addQuote); 
+app.use(fetchQuotes); 
+app.use(getMoodForUser); 
 app.get('*', (req, res) => {
     const filePath = path.join(__dirname, '../../client/dist', 'index.html');
     res.sendFile(filePath);
