@@ -8,7 +8,7 @@ export const JournalSchema:Schema = new Schema<JournalType>({
         type:String,
         required: true,
     },
-    createdBy:{
+    userName:{
         type:String,
         required: true,
     },

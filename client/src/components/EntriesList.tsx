@@ -1,4 +1,6 @@
 import { useState } from "react";
+import {MakeProtectedPostRequest} from "@/utils/makeProtectedPostRequest.ts";
+import {useAuth0} from "@auth0/auth0-react";
 
 interface Entry {
     title: string;
@@ -33,6 +35,21 @@ const EntriesList: React.FC<EntriesListProps> = ({
         setEditedTitle(entries[index].title);
         setEditedText(entries[index].text);
     };
+    const {user, getAccessTokenSilently} = useAuth0();
+    const removeEntry = async (entryId: string) => {
+        try {
+            const token = await getAccessTokenSilently();
+
+            const bodyData = {
+                _id: entryId
+            };
+
+            const data = await MakeProtectedPostRequest('/api/removeEntry', bodyData, token);
+            props.getHabits();
+        } catch (e) {
+            console.log("Error removing habit: ", e);
+        }
+    }
 
     const handleSave = (index: number) => {
         handleEditEntry(index, editedTitle, editedText);

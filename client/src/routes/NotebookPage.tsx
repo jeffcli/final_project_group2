@@ -56,8 +56,8 @@ export default function NotebookPage() {
     }
 
     useEffect(() => {
-        getEntries().then();
-    }, [window])
+        getEntries();
+    }, []);
 
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -119,6 +119,7 @@ export default function NotebookPage() {
                         setTitle={setTitle}
                         setText={setText}
                         handleSubmit={handleSubmit}
+                        getEntries={getEntries} // Pass getEntries as a prop
                     />
                 </div>
                 <div className="flex-1 p-4">
