@@ -9,7 +9,7 @@ import journalIcon from './assets/notebook-svgrepo-com.svg'
 import moodIcon from './assets/smile-circle-svgrepo-com.svg'
 import { Button } from './components/ui/button'
 import MoodForm from './components/MoodForm'
-import { QuoteModal } from './components/quoteModal'
+import { QuoteModal } from './components/QuoteModal'
 import { makeProtectedGetRequest } from './utils/makeProtectedGetRequest'
 
 type wellnessStats = {
