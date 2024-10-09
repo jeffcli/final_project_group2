@@ -1,11 +1,13 @@
 import { useState } from "react";
-import {MakeProtectedPostRequest} from "@/utils/makeProtectedPostRequest.ts";
-import {useAuth0} from "@auth0/auth0-react";
+import { MakeProtectedPostRequest } from "@/utils/makeProtectedPostRequest.ts";
+import { useAuth0 } from "@auth0/auth0-react";
+import { Button } from "../components/ui/button";
 
 interface Entry {
     title: string;
     text: string;
     dateCreated: string;
+    _id: string; // Ensure that _id is included for operations like delete and update
 }
 
 interface EntriesListProps {
@@ -15,7 +17,8 @@ interface EntriesListProps {
     editingIndex: number | null;
     setEditingIndex: (index: number | null) => void;
     handleEditEntry: (index: number, newTitle: string, newText: string) => void;
-    handleDeleteEntry: (entryIndex: number) => void;
+    handleDeleteEntry: (index: number) => void;
+    getEntries: () => Promise<void>; // Ensure getEntries is passed in props
 }
 
 const EntriesList: React.FC<EntriesListProps> = ({
@@ -26,30 +29,33 @@ const EntriesList: React.FC<EntriesListProps> = ({
                                                      setEditingIndex,
                                                      handleEditEntry,
                                                      handleDeleteEntry,
+                                                     getEntries,
                                                  }) => {
     const [editedTitle, setEditedTitle] = useState<string>('');
     const [editedText, setEditedText] = useState<string>('');
+    const { user, getAccessTokenSilently } = useAuth0();
 
     const handleEditStart = (index: number) => {
         setEditingIndex(index);
         setEditedTitle(entries[index].title);
         setEditedText(entries[index].text);
     };
-    const {user, getAccessTokenSilently} = useAuth0();
-    const removeEntry = async (entryId: string) => {
+
+    const removeEntry = async (entryId: string, index: number) => {
+        handleDeleteEntry(index); // Update UI immediately by removing the entry
         try {
             const token = await getAccessTokenSilently();
 
             const bodyData = {
-                _id: entryId
+                _id: entryId,
             };
 
-            const data = await MakeProtectedPostRequest('/api/removeEntry', bodyData, token);
-            props.getHabits();
+            await MakeProtectedPostRequest("/api/deleteEntry", bodyData, token);
+            await getEntries(); // Fetch updated list of entries after deletion
         } catch (e) {
-            console.log("Error removing habit: ", e);
+            console.error("Error removing entry: ", e);
         }
-    }
+    };
 
     const handleSave = (index: number) => {
         handleEditEntry(index, editedTitle, editedText);
@@ -61,7 +67,7 @@ const EntriesList: React.FC<EntriesListProps> = ({
             <h2 className="text-2xl">Entries:</h2>
             <ul className="mt-4">
                 {entries.map((entry, index) => (
-                    <li key={index} className="p-4 bg-gray-100 rounded-md mt-2">
+                    <li key={entry._id} className="p-4 bg-gray-100 rounded-md mt-2">
                         {editingIndex === index ? (
                             <div className="flex flex-col">
                                 <input
@@ -103,18 +109,18 @@ const EntriesList: React.FC<EntriesListProps> = ({
                                     </strong>
                                     <div className="text-sm text-gray-500">{entry.dateCreated}</div>
                                     <div>
-                                        <button
+                                        <Button
                                             onClick={() => handleEditStart(index)}
-                                            className="text-green-600 hover:text-green-800 mr-2"
+                                            className="text-white bg-green-600 hover:bg-green-700 mr-2"
                                         >
                                             Edit
-                                        </button>
-                                        <button
-                                            onClick={() => handleDeleteEntry(index)}
-                                            className="text-red-600 hover:text-red-800"
+                                        </Button>
+                                        <Button
+                                            onClick={() => removeEntry(entry._id, index)} // Pass entry._id and index
+                                            className="text-white bg-red-600 hover:bg-red-800"
                                         >
                                             Delete
-                                        </button>
+                                        </Button>
                                     </div>
                                 </div>
                                 {expandedEntryIndex === index && (

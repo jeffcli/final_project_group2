@@ -55,9 +55,12 @@ export default function NotebookPage() {
         }
     }
 
+
+    // Use useEffect to fetch entries on page load
     useEffect(() => {
         getEntries();
-    }, []);
+    }, [window]); // Empty dependency array means this runs on mount
+
 
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -159,10 +162,11 @@ export default function NotebookPage() {
                                     delete newEntries[dateString];
                                 }
                             }
+
                             return newEntries;
                         });
                     }}
-                />
+                 getEntries={getEntries}/>
             </div>
         </div>
     );
