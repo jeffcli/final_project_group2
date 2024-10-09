@@ -3,7 +3,7 @@ import journal from '../mongoose/journal/model';
 import { JournalType } from '../mongoose/journal/schema';
 const router = express.Router();
 router.post('/api/updateEntry', async(req, res) => {
-    const userName = req.body.createdBy;
+    const userName = req.body.userName;
     const oldEntry = await journal.findById(req.body._id);
     let newCompleted:String[] = oldEntry.completed;
     if (req.body.done == true) {

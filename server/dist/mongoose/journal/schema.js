@@ -11,7 +11,7 @@ exports.JournalSchema = new mongoose_1.Schema({
         type:String,
         required: true,
     },
-    createdBy:{
+    userName:{
         type:String,
         required: true,
     },

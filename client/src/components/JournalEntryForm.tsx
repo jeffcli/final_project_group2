@@ -15,14 +15,16 @@ interface JournalEntryFormProps {
 
     const JournalEntryForm: React.FC<JournalEntryFormProps> = ({entries, title, text, setTitle, setText, handleSubmit}) => {
         const {user, getAccessTokenSilently} = useAuth0();
+
         const addEntry = async () => {
             try {
                 const token = await getAccessTokenSilently();
 
                 const bodyData = {
                     userName: user!.name,
-                    dateCreated: new Date().toDateString(),
-                    description: title,
+                    title: title,
+                    dateCreated: new Date().toISOString(),
+                    entry: text,
                 };
 
                 const data = await MakeProtectedPostRequest('/api/addEntry', bodyData, token);
@@ -55,7 +57,7 @@ interface JournalEntryFormProps {
                         placeholder={"Write your journal entry..."}
                     />
                     </div>
-                    <Button type="submit" onClick={addEntry} className="mt-2 px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700">
+                    <Button type="submit" onClick={addEntry}  className="mt-2 px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700">
                         {'Add Entry'}
                     </Button>
                 </form>

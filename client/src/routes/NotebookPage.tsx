@@ -26,32 +26,32 @@ export default function NotebookPage() {
             const token = await getAccessTokenSilently();
 
             const toFetch = {
-                userName: user!.name
+                userName: user!.name,
             };
 
-            const data = await MakeProtectedPostRequest('/api/getEntry',toFetch, token);
+            const data = await MakeProtectedPostRequest('/api/getEntries', toFetch, token);
             setUserEntries(data.data);
         } catch (e) {
             console.log("Error getting entries: ", e);
         }
     }
 
-    const updateEntry = async (habitId: string, done: boolean) => {
+    const updateEntry = async (entryID: string, done: boolean) => {
         try {
             const token = await getAccessTokenSilently();
 
-            console.log(habitId);
+            console.log(entryID);
             console.log(done);
             const toUpdate = {
-                _id: habitId,
+                _id: entryID,
                 done: done,
                 userName: user!.name
             };
 
-            const data = await MakeProtectedPostRequest('/api/updateEntry',toUpdate, token);
+            const data = await MakeProtectedPostRequest('/api/updateEntry', toUpdate, token);
             setUserEntries(data.data);
         } catch (e) {
-            console.log("Error getting habits: ", e);
+            console.log("Error getting entries: ", e);
         }
     }
 
@@ -60,10 +60,7 @@ export default function NotebookPage() {
     }, [window])
 
 
-
-
-
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const dateString = date.toISOString().split('T')[0];
         if (title.trim() && text.trim()) {
@@ -72,8 +69,17 @@ export default function NotebookPage() {
                 text,
                 dateCreated: new Date().toLocaleString(),
             };
+            try {
+                const token = await getAccessTokenSilently();
+                const toSave = {...newEntry, userName: user!.name};
+                await MakeProtectedPostRequest('/api/addEntry', toSave, token);
+                await getEntries();
+            } catch (e) {
+                console.log("Error saving entry: ", e);
+            }
+            resetForm();
             setEntries(prevEntries => {
-                const newEntries = { ...prevEntries };
+                const newEntries = {...prevEntries};
                 if (!newEntries[dateString]) {
                     newEntries[dateString] = [];
                 }
@@ -108,13 +114,12 @@ export default function NotebookPage() {
             <div className="flex">
                 <div className="flex-1 p-4">
                     <JournalEntryForm
-                        entries = {getEntries}
                         title={title}
                         text={text}
                         setTitle={setTitle}
                         setText={setText}
                         handleSubmit={handleSubmit}
-                     />
+                    />
                 </div>
                 <div className="flex-1 p-4">
                     <CalendarSection
@@ -137,7 +142,7 @@ export default function NotebookPage() {
                             dateCreated: todayEntries[index].dateCreated,
                         };
                         setEntries(prevEntries => {
-                            const newEntries = { ...prevEntries };
+                            const newEntries = {...prevEntries};
                             if (newEntries[dateString]) {
                                 newEntries[dateString][index] = updatedEntry;
                             }
@@ -146,7 +151,7 @@ export default function NotebookPage() {
                     }}
                     handleDeleteEntry={(index: number) => {
                         setEntries(prevEntries => {
-                            const newEntries = { ...prevEntries };
+                            const newEntries = {...prevEntries};
                             if (newEntries[dateString]) {
                                 newEntries[dateString] = newEntries[dateString].filter((_, i) => i !== index);
                                 if (newEntries[dateString].length === 0) {

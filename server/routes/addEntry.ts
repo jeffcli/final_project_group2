@@ -1,14 +1,6 @@
-"use strict";
-import express from "express";
-import {JournalType} from "../../mongoose/journal/schema";
-import journal from "../../mongoose/journal/model";
-
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const model_1 = __importDefault(require("../mongoose/friends/model"));
+import express from 'express';
+import journal from "../mongoose/journal/model";
+import { JournalType } from '../mongoose/journal/schema';
 const router = express.Router();
 router.post('/api/addEntry', async (req, res) => {
     try {
