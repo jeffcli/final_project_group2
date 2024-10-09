@@ -4,6 +4,11 @@ import { Card } from './components/ui/card'
 import logo from './assets/logo.png'
 import { useAuth0 } from '@auth0/auth0-react'
 import { MakeProtectedPostRequest } from './utils/makeProtectedPostRequest'
+import habitIcon from './assets/task-square-svgrepo-com.svg'
+import journalIcon from './assets/notebook-svgrepo-com.svg'
+import moodIcon from './assets/smile-circle-svgrepo-com.svg'
+import { Button } from './components/ui/button'
+import MoodForm from './components/MoodForm'
 
 type wellnessStats = {
   habitsCompleted: string,
@@ -64,24 +69,31 @@ function App() {
     <div className="absolute w-full h-64 bg-red-200 -z-10"></div>
     <div className="max-w-screen-lg mx-auto">
       
-      <div className="flex flex-col justify-center gap-2 w-2/5 mx-auto h-64">
-        <h1 className="text-center text-4xl font-semibold text-wrap">
-          {quote.text}
-        </h1>
-        <p className="text-right text-xl font-light">
-          -{quote.author}
-        </p>
+      <div className="w-2/5 mx-auto h-64 flex flex-col">
+        <div className="inline-flex flex-col justify-center self-center gap-2 h-full mt-[2rem]">
+          <h1 className="text-center text-4xl font-semibold text-wrap">
+            {quote.text}
+          </h1>
+          <p className="text-right text-xl font-light">
+            -{quote.author}
+          </p>
+        </div>
+        <div className="mx-auto">
+          <Button variant="link" className="text-rose-500">Suggest a Quote</Button>
+        </div>
       </div>
+
       
       {/* Your Wellness Overview */}
-      <div className="grid grid-rows-1 grid-cols-4 my-4 h-52 gap-3">
-        <h1 className="text-4xl font-semibold my-4">
+      <h1 className="text-4xl font-semibold my-4">
           Your Wellness
         </h1>
+      <div className="grid grid-rows-1 grid-cols-3 my-4 h-60 gap-3 px-4">
+
         <Card>
-          <div className="flex flex-col m-2">
-            <div className="w-24 h-24 mx-auto">
-              <img src={logo} className="w-full h-full object-contain"/>
+          <div className="flex flex-col m-2 h-full">
+            <div className="w-16 h-16 mx-auto my-4">
+              <img src={habitIcon} className="w-full h-full object-contain"/>
             </div>  
             <div>
               <h1 className="font-extrabold text-center text-4xl">
@@ -91,14 +103,15 @@ function App() {
                 Habits Completed Today
               </div>
             </div>
+            <Button className="m-auto max-w-36" variant="outline">Go to Habits</Button>
           </div>
           
 
         </Card>
         <Card>
-          <div className="flex flex-col m-2">
-            <div className="w-24 h-24 mx-auto">
-              <img src={logo} className="w-full h-full object-contain"/>
+          <div className="flex flex-col m-2 h-full">
+            <div className="w-16 h-16 mx-auto my-4">
+              <img src={journalIcon} className="w-full h-full object-contain"/>
             </div>  
             <div>
               <h1 className="font-extrabold text-center text-4xl">
@@ -108,14 +121,15 @@ function App() {
                 Last Journal Entry
               </div>
             </div>
+            <Button className="m-auto max-w-36" variant="outline">Go to Journal</Button>
           </div>
           
 
         </Card>
         <Card>
-          <div className="flex flex-col m-2">
-            <div className="w-24 h-24 mx-auto">
-              <img src={logo} className="w-full h-full object-contain"/>
+          <div className="flex flex-col m-2 h-full">
+            <div className="w-16 h-16 mx-auto my-4">
+              <img src={moodIcon} className="w-full h-full object-contain"/>
             </div>  
             <div>
               <h1 className="font-extrabold text-center text-4xl">
@@ -125,9 +139,8 @@ function App() {
                 Average Mood (last 7 days)
               </div>
             </div>
+            <MoodForm/>
           </div>
-          
-
         </Card>
       </div>
     </div>

@@ -9,6 +9,7 @@ import path from 'path';
 import removeFriend from './routes/removeFriend'; 
 import { auth } from "express-oauth2-jwt-bearer";
 import getUsers from './routes/getUsers'; 
+import updateMood from './routes/updateMood';
 
 
 dotenv.config({path:"../.env"}); 
@@ -46,6 +47,7 @@ app.use(deleteHabit);
 app.use(updateHabit);
 app.use(removeFriend); 
 app.use(updateFriend); 
+app.use(updateMood);
 app.use(getUsers); 
 app.get('*', (req, res) => {
     const filePath = path.join(__dirname, '../../client/dist', 'index.html');
