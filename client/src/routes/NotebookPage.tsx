@@ -1,4 +1,3 @@
-// In `NotebookPage.tsx`
 import { useEffect, useState } from "react";
 import CalendarSection from "../components/CalendarSection";
 import EntriesList from "../components/EntriesList";
@@ -66,17 +65,19 @@ export default function NotebookPage() {
                 console.log("Error saving entry: ", e);
             }
 
+            // Reset the form after submission
             resetForm();
         }
     };
 
-
+    // Reset form fields
     const resetForm = () => {
         setTitle('');
         setText('');
         setEditingIndex(null);
     };
 
+    // Handle date change in calendar
     const handleDateChange = (day: Date) => {
         setDate(day);
         resetForm();
@@ -105,6 +106,7 @@ export default function NotebookPage() {
                 return newEntries;
             });
 
+            // Fetch updated entries from the backend to ensure persistence
             getEntries();
 
         } catch (e) {

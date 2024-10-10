@@ -10,7 +10,7 @@ const CalendarSection: React.FC<CalendarSectionProps> = ({ date, handleDateChang
     return (
         <div className="bg-white shadow-lg rounded-lg p-6 mb-6 flex flex-col items-center">
             <h2 className="text-2xl font-bold mb-4 text-center">Calendar</h2>
-            <div className="flex justify-center items-center w-full">
+            <div className="flex justify-center h-full">
                 <Calendar
                     value={date}
                     onDayClick={handleDateChange}

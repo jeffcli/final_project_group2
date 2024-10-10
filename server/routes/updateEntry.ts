@@ -1,16 +1,15 @@
 import express from 'express';
 import journal from '../mongoose/journal/model';
-import { JournalType } from '../mongoose/journal/schema';
 
 const router = express.Router();
 
 router.post('/api/updateEntry', async (req, res) => {
     try {
-        const { _id, title, text, dateCreated } = req.body;
+        const { _id, title, entry, dateCreated, userName } = req.body;
 
         const updatedEntry = await journal.findByIdAndUpdate(
             _id,
-            { title, text, dateCreated },
+            { title, entry, dateCreated, userName },
             { new: true, runValidators: true }
         );
 
@@ -18,10 +17,7 @@ router.post('/api/updateEntry', async (req, res) => {
             return res.status(404).json({ message: 'Entry not found' });
         }
 
-
-        const userEntries = await journal.find({ userName: req.body.userName });
-
-        res.json({ updatedEntry, userEntries });
+        res.json(updatedEntry);
     } catch (error) {
         console.error('Error updating entry:', error);
         res.status(500).json({ message: 'Internal server error' });

@@ -1,4 +1,3 @@
-// In `EntriesList.tsx`
 import { useState } from 'react';
 import { MakeProtectedPostRequest } from '@/utils/makeProtectedPostRequest';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -56,8 +55,8 @@ const EntriesList: React.FC<EntriesListProps> = ({
         }
     };
 
-    const handleSave = (index: number) => {
-        handleEditEntry(index, editedTitle, editedText);
+    const handleSave = async (index: number) => {
+        await handleEditEntry(index, editedTitle, editedText);
         setEditingIndex(null);
     };
 
@@ -86,45 +85,53 @@ const EntriesList: React.FC<EntriesListProps> = ({
                                         placeholder="Edit Text"
                                     />
                                     <div className="flex justify-end mt-2">
-                                        <button
+                                        <Button
                                             onClick={() => handleSave(index)}
                                             className="px-4 py-2 text-white bg-green-600 rounded hover:bg-green-700 mr-2"
                                         >
                                             Save
-                                        </button>
-                                        <button
+                                        </Button>
+                                        <Button
                                             onClick={() => setEditingIndex(null)}
                                             className="px-4 py-2 text-red-600 rounded hover:text-red-800"
                                         >
                                             Cancel
-                                        </button>
+                                        </Button>
                                     </div>
                                 </div>
                             ) : (
-                                <>
-                                    <div className="flex justify-between items-center">
+                                <div className="flex justify-between items-center">
+                                    <div className="flex-1">
                                         <strong
                                             className="cursor-pointer hover:text-blue-500"
                                             onClick={() => toggleEntry(index)}
                                         >
                                             {entry.title || 'Untitled'}
                                         </strong>
-                                        <div className="text-sm text-gray-500">{formatDate(entry.dateCreated)}</div>
-                                        <div>
-                                            <Button onClick={() => handleEditStart(index)} className="text-white-600 bg-red hover:text-green-800">
-                                                Edit
-                                            </Button>
-                                            <Button onClick={() => removeEntry(entry._id, index)} className="text-white-600 bg-red hover:text-red-800 ">
-                                                Delete
-                                            </Button>
-                                        </div>
                                     </div>
-                                    {expandedEntryIndex === index && (
-                                        <div className="mt-2 p-2 border rounded-md bg-white">
-                                            <p>{entry.entry || 'No content available.'}</p>
-                                        </div>
-                                    )}
-                                </>
+                                    <div className="flex-1 text-sm text-gray-500 flex items-center">
+                                        {formatDate(entry.dateCreated)}
+                                    </div>
+                                    <div className="flex items-center">
+                                        <Button
+                                            onClick={() => handleEditStart(index)}
+                                            className="text-white-600 bg-red mr-2"
+                                        >
+                                            Edit
+                                        </Button>
+                                        <Button
+                                            onClick={() => removeEntry(entry._id, index)}
+                                            className="text-white bg-red-600 hover:bg-red-700"
+                                        >
+                                            Delete
+                                        </Button>
+                                    </div>
+                                </div>
+                            )}
+                            {expandedEntryIndex === index && (
+                                <div className="mt-2 p-2 border rounded-md bg-white">
+                                    <p>{entry.entry || 'No content available.'}</p>
+                                </div>
                             )}
                         </li>
                     ))
