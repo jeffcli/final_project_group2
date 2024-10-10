@@ -160,7 +160,7 @@ function App() {
                 Habits Completed Today
               </div>
             </div>
-            <Button className="m-auto max-w-36" variant="outline" asChild><a href="/habits">
+            <Button className="m-auto max-w-36" variant="outline" asChild><a href="/home/habits">
               Go to Habits
               </a></Button>
           </div>
@@ -181,7 +181,7 @@ function App() {
               </div>
             </div>
             <Button className="m-auto max-w-36" variant="outline" asChild>
-              <a href="/journal">Go to Journal</a>
+              <a href="/home/journal">Go to Journal</a>
             </Button>
           </div>
           
