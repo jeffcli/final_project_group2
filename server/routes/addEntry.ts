@@ -19,8 +19,6 @@ router.post('/api/addEntry', async (req, res) => {
         };
 
         await journal.create(newEntry);
-
-        // Query the db to return all entries for this user
         const updatedEntries = await journal.find({ userName: userName });
         res.json(updatedEntries);
     } catch (error) {

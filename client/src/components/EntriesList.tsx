@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { MakeProtectedPostRequest } from '@/utils/makeProtectedPostRequest';
-import { useAuth0 } from '@auth0/auth0-react';
-import { Button } from '../components/ui/button';
-import { formatDate } from '@/utils/formatDate';
+import {useState} from 'react';
+import {MakeProtectedPostRequest} from '@/utils/makeProtectedPostRequest';
+import {useAuth0} from '@auth0/auth0-react';
+import {Button} from '../components/ui/button';
+import {formatDate} from '@/utils/formatDate';
 
 interface Entry {
     _id: string;
@@ -41,13 +41,13 @@ const EntriesList: React.FC<EntriesListProps> = ({
         setEditedText(entries[index].entry);
     };
 
-    const { getAccessTokenSilently } = useAuth0();
+    const {getAccessTokenSilently} = useAuth0();
 
     const removeEntry = async (entryId: string, index: number) => {
         handleDeleteEntry(index);
         try {
             const token = await getAccessTokenSilently();
-            const bodyData = { _id: entryId };
+            const bodyData = {_id: entryId};
             await MakeProtectedPostRequest('/api/deleteEntry', bodyData, token);
             await getEntries(); // Ensure this updates the entries state
         } catch (e) {
@@ -93,7 +93,7 @@ const EntriesList: React.FC<EntriesListProps> = ({
                                         </Button>
                                         <Button
                                             onClick={() => setEditingIndex(null)}
-                                            className="px-4 py-2 text-red-600 rounded hover:text-red-800"
+                                            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
                                         >
                                             Cancel
                                         </Button>

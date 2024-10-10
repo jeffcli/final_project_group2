@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import CalendarSection from "../components/CalendarSection";
 import EntriesList from "../components/EntriesList";
 import JournalEntryForm from "../components/JournalEntryForm";
-import { MakeProtectedPostRequest } from "@/utils/makeProtectedPostRequest.ts";
-import { useAuth0 } from "@auth0/auth0-react";
+import {MakeProtectedPostRequest} from "@/utils/makeProtectedPostRequest.ts";
+import {useAuth0} from "@auth0/auth0-react";
 
 interface Entry {
     _id: string;
@@ -13,7 +13,7 @@ interface Entry {
 }
 
 export default function NotebookPage() {
-    const { user, getAccessTokenSilently } = useAuth0();
+    const {user, getAccessTokenSilently} = useAuth0();
     const [userEntries, setUserEntries] = useState<Entry[]>([]);
     const [title, setTitle] = useState<string>('');
     const [text, setText] = useState<string>('');
@@ -55,7 +55,7 @@ export default function NotebookPage() {
 
             try {
                 const token = await getAccessTokenSilently();
-                const toSave = { ...newEntry, userName: user!.name };
+                const toSave = {...newEntry, userName: user!.name};
 
                 await MakeProtectedPostRequest('/api/addEntry', toSave, token);
 
@@ -95,18 +95,16 @@ export default function NotebookPage() {
 
         try {
             const token = await getAccessTokenSilently();
-            const toUpdate = { ...updatedEntry, userName: user!.name };
+            const toUpdate = {...updatedEntry, userName: user!.name};
 
             await MakeProtectedPostRequest('/api/updateEntry', toUpdate, token);
 
-            // Update local state
+
             setUserEntries(prevEntries => {
                 const newEntries = [...prevEntries];
                 newEntries[index] = updatedEntry;
                 return newEntries;
             });
-
-            // Fetch updated entries from the backend to ensure persistence
             getEntries();
 
         } catch (e) {
