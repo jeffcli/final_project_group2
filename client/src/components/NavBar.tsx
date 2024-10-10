@@ -11,7 +11,7 @@ export default function NavBar() {
     const handleLogout = () => {
         logout({
             logoutParams: {
-                returnTo: `${window.location.origin}/welcome`,
+                returnTo: `${window.location.origin}/`,
             }
         });
     }
@@ -31,23 +31,23 @@ export default function NavBar() {
             <nav className="my-auto">
                 <ul className="flex flex-row justify-end gap-1">
                     <li className="">
-                        <Button variant={location.pathname === '/' ? 'outline' : 'ghost'} asChild>
-                            <a href="/">Home</a>
+                        <Button variant={location.pathname === '/home/dashboard' ? 'outline' : 'ghost'} asChild>
+                            <a href="/home/dashboard">Home</a>
                         </Button>
                     </li>
                     <li className="">
-                        <Button variant={location.pathname === '/habits' ? 'outline' : 'ghost'} asChild>
-                            <a href="/habits">Habits</a>
+                        <Button variant={location.pathname === '/home/habits' ? 'outline' : 'ghost'} asChild>
+                            <a href="/home/habits">Habits</a>
                         </Button>
                     </li>
                     <li className="">
-                        <Button variant={location.pathname === '/journal' ? 'outline' : 'ghost'} asChild>
-                            <a href="/journal">Journal</a>
+                        <Button variant={location.pathname === '/home/journal' ? 'outline' : 'ghost'} asChild>
+                            <a href="/home/journal">Journal</a>
                         </Button>
                     </li>
                     <li className="">
-                        <Button variant={location.pathname === '/friends' ? 'outline' : 'ghost'} asChild>
-                            <a href="/friends">Friends</a>
+                        <Button variant={location.pathname === '/home/friends' ? 'outline' : 'ghost'} asChild>
+                            <a href="/home/friends">Friends</a>
                         </Button>
                     </li>
                     <li className="">
