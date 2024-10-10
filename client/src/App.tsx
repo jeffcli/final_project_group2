@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import { Card } from './components/ui/card'
-import logo from './assets/logo.png'
 import { useAuth0 } from '@auth0/auth0-react'
 import { MakeProtectedPostRequest } from './utils/makeProtectedPostRequest'
 import habitIcon from './assets/task-square-svgrepo-com.svg'
@@ -73,19 +72,42 @@ function App() {
           userName: user!.name
       }; 
   
-        let data = await MakeProtectedPostRequest('/api/getHabits',toFetch, token);
-          let completed = 0;
-          data.data.forEach((habit : any) => {
-            for (let i = 0; i < habit.completed.length; i++) {
-              let mongoDBDate = new Date(habit.completed[i]).toDateString();
-              let today = new Date().toDateString();
-              if (mongoDBDate.slice(0, 10) === today.slice(0, 10)) {
-                  completed++;
-                  break;
-              }
-            }
-          })
-          stats.habitsCompleted = completed.toString() + "/" + data.data.length;
+      let data = await MakeProtectedPostRequest('/api/getHabits',toFetch, token);
+      let completed = 0;
+      data.data.forEach((habit : any) => {
+        for (let i = 0; i < habit.completed.length; i++) {
+          let mongoDBDate = new Date(habit.completed[i]).toDateString();
+          let today = new Date().toDateString();
+          if (mongoDBDate.slice(0, 10) === today.slice(0, 10)) {
+              completed++;
+              break;
+          }
+        }
+      })
+      stats.habitsCompleted = completed.toString() + "/" + data.data.length;
+
+      let journalData = await MakeProtectedPostRequest('/api/getEntries', toFetch, token);
+      if (journalData.data.length > 0) {
+        const lastEntry = journalData.data[journalData.data.length - 1];
+        const dayDifference = Math.round((new Date().getTime() - new Date(lastEntry.dateCreated).getTime()) / (1000 * 3600 * 24)).toString()
+        stats.lastJournalEntry = (dayDifference == "0" ? "Today" : (dayDifference == "1" ? dayDifference + " day ago" : dayDifference + " days ago"));
+      }
+
+      let moodData = await MakeProtectedPostRequest('/api/getMoodForUser', toFetch, token);
+      if (moodData.data) {
+        const moods = moodData.data[0].moods;
+        let sum = 0;
+        let count = 0;
+        moods.map((mood: string) => {
+          if (mood !== "") {
+            sum+=parseInt(mood);
+            count++;
+          }
+        })
+        if (count > 0) {
+          stats.averageMood = (sum/count).toFixed(1);
+        }
+      }
       } catch (e) {
         console.log("Error getting habits: ", e);
       }
@@ -136,7 +158,9 @@ function App() {
                 Habits Completed Today
               </div>
             </div>
-            <Button className="m-auto max-w-36" variant="outline">Go to Habits</Button>
+            <Button className="m-auto max-w-36" variant="outline" asChild><a href="/habits">
+              Go to Habits
+              </a></Button>
           </div>
           
 
@@ -154,7 +178,9 @@ function App() {
                 Last Journal Entry
               </div>
             </div>
-            <Button className="m-auto max-w-36" variant="outline">Go to Journal</Button>
+            <Button className="m-auto max-w-36" variant="outline" asChild>
+              <a href="/journal">Go to Journal</a>
+            </Button>
           </div>
           
 
@@ -172,7 +198,7 @@ function App() {
                 Average Mood (last 7 days)
               </div>
             </div>
-            <MoodForm/>
+            <MoodForm updateStats={updateStats}/>
           </div>
         </Card>
       </div>
