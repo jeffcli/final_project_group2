@@ -54,4 +54,4 @@ Jeffrey
 - Figma Mockups
 - MongoDB schema designs
 
-Video link will go here
+Video link here: https://youtu.be/pDTlQYR5Iec
