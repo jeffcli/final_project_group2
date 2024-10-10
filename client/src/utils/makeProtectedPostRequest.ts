@@ -5,7 +5,7 @@ export async function MakeProtectedPostRequest(
   dataToSend: object,
   token: string,
 ) {
-  console.log("token is", token); 
+  console.log("calling", apiToCall); 
   const data = await axios.post(apiToCall, dataToSend, {
     headers: {
       Authorization: `Bearer ${token}`,

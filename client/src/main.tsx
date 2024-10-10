@@ -12,12 +12,12 @@ import { FriendsProvider } from './contexts/FriendsContext.tsx';
 import Habits from './routes/Habits.tsx';
 const router = createBrowserRouter([
   { // All routes for logged in users should be children of this route
-    path: "/",
+    path: "/home",
     element: <Root />,
     children: [
       {
-        path: "",
-        element: <App />,
+        path: "dashboard",
+        element: <AuthenticationGuard component={App}/>,
       },
       {
         path:"friends",
@@ -36,7 +36,7 @@ const router = createBrowserRouter([
     ],
   },
   { // Landing page for non-logged in users
-    path: "/welcome",
+    path: "/",
     element: <LandingPage />,
   },
 
@@ -53,7 +53,7 @@ createRoot(document.getElementById('root')!).render(
           clientId='C8KUX8xnplvjaekDTmTGhin7a0UYoOyl'
           
           authorizationParams={{
-            redirect_uri: `${window.location.origin}/friends`, 
+            redirect_uri: `${window.location.origin}/home/dashboard`, 
           }}
 
       >

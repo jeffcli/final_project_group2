@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label"
 import { MakeProtectedPostRequest } from "@/utils/makeProtectedPostRequest";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function AddHabitForm(props: {getHabits: () => void}) {
     const {user, getAccessTokenSilently} = useAuth0(); 
@@ -29,7 +30,7 @@ export default function AddHabitForm(props: {getHabits: () => void}) {
       }; 
   
         const data = await MakeProtectedPostRequest('/api/addHabit', bodyData, token); 
-        console.log(data.data);
+        toast.success("Added new habit successfully")
         props.getHabits();
       } catch (e) {
         console.log("Error adding habit: ", e);

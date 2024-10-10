@@ -13,7 +13,7 @@ router.post('/api/addHabit', async (req, res) => {
         created: created, 
         completed: completed
     }; 
-    //console.log(newHabit);
+    console.log(newHabit);
     await habits.create(newHabit); 
     //query the db to return all habits for this user 
     const updatedHabits:HabitsType[] = await habits.find({userName:userName});

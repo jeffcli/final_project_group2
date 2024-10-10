@@ -22,7 +22,7 @@ import {
   } from "@/components/ui/popover"
   import photo from "../assets/default-photo.jpeg"; 
   import { Input } from "@/components/ui/input"
-  import axios from 'axios'; 
+  import axios, { all } from 'axios'; 
 interface Friend{
     name:string, 
     relationship:string
@@ -54,9 +54,19 @@ import { makeProtectedGetRequest } from "@/utils/makeProtectedGetRequest";
     useEffect(() => { 
         const makeReq = async () => { 
             if(!fetched){
-                const token = await getAccessTokenSilently(); 
-            const data = await makeProtectedGetRequest('/api/getUsers',token ); 
-            setUsers(data.data); 
+            const token = await getAccessTokenSilently(); 
+            const friendsNames:string[] = []; 
+                for(let i = 0; i < friends.length; i++){
+                friendsNames.push((friends[i] as Friend).name)
+             }; 
+             const data = await makeProtectedGetRequest('/api/getUsers',token ); 
+
+             const newUsers =  data.data.filter((item:string) => !friendsNames.includes(item)); 
+
+
+
+
+            setUsers(newUsers); 
             setAllUsers(data.data); 
 
             setFetched(true); 
@@ -108,23 +118,25 @@ import { makeProtectedGetRequest } from "@/utils/makeProtectedGetRequest";
         
         
     }
-    useEffect(() => {
+    
 
-        if(users.length && friends.length && !parsed){
-            const names:string[] = []; 
-            for(let i = 0; i < friends.length; i++){
-                names.push((friends[i] as Friend).name)
-            }
-            //now we filter 
-            const newUsers = users.filter((item) => !names.includes(item)); 
-            console.log("new users", newUsers); 
+
+
+
+    useEffect(() =>{
+        console.log("friends were updated to", friends); 
+        const friendsNames:string[] = []; 
+        for(let i = 0; i < friends.length; i++){
+            friendsNames.push((friends[i] as Friend).name)
+        }; 
+        const newUsers = allUsers.filter((item) => !friendsNames.includes(item)); 
+        console.log("new", newUsers); 
+        if(fetched){
             setUsers(newUsers); 
-            setParsed(true); 
         }
-     
+       
         
-        
-    }, [friends, users, parsed]); 
+    }, [friends, window]); 
 
 
 

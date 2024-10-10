@@ -6,12 +6,14 @@
       "@/*": ["./src/*"]
     },
     "target": "ES2022",
-    "module": "commonjs",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "rootDir": "./",
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true, 
+    "jsx": "react"
   },
   "include": ["**/*.ts", "client/vite.config.ts"],
   "exclude": ["node_modules"]

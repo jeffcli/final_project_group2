@@ -14,7 +14,7 @@ router.post('/api/updateHabit', async(req, res) => {
     const updatedHabit = await habits.findByIdAndUpdate(req.body._id, {completed: newCompleted}, {new:true}); 
     console.log(updatedHabit)
     const data = await habits.find({userName:userName}); 
-    res.json(data); 
+    res.json(data);     
 
 }); 
 export default router; 
