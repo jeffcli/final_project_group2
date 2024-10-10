@@ -53,7 +53,7 @@ createRoot(document.getElementById('root')!).render(
           clientId='C8KUX8xnplvjaekDTmTGhin7a0UYoOyl'
           
           authorizationParams={{
-            redirect_uri: `${window.location.origin}/friends`, 
+            redirect_uri: `${window.location.origin}/`, 
           }}
 
       >
