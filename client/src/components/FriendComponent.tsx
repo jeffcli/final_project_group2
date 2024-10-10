@@ -14,6 +14,10 @@ import { useFriendsContext } from "@/contexts/FriendsContext";
 import { useEffect, useState } from "react";
 import { UpdateFriendModal } from "./UpdateFriendModal";
 import { toast } from "sonner";
+import TrashIcon from "../assets/trash.svg";
+import SmileIcon from "../assets/smile-circle-svgrepo-com.svg";
+import AverageFace from "../assets/neutral-face.svg";
+import FrownFace from "../assets/frown-face.svg";
 export const FriendComponent = (props:props) => { 
     const [modalOpen, setModalOpen] = useState<boolean>(false); 
     const {user, getAccessTokenSilently} = useAuth0(); 
@@ -58,7 +62,7 @@ export const FriendComponent = (props:props) => {
     return(
         <div>
             <Separator/>
-            <div className="flex flex-row items-center   mt-2 mb-2 justify-between  ml-auto"> 
+            <div className="flex flex-row items-center mt-2 mb-2 justify-between  ml-auto"> 
                 <img className=" h-20 rounded-full aspect-square object-cover " src={photo} alt={props.name} />
                 <div className = "flex flex-col items-start ml-5">
                     <p className="font-poppins">{props.name}</p>
@@ -66,11 +70,15 @@ export const FriendComponent = (props:props) => {
                 </div>
                     <div className="flex ml-auto items-center">
                    
-                    <Progress value={mood * 10} className="ml-10 w-36" /> 
+                   <div className="mx-2 ml-4 flex flex-col justify-center">
+                    <img src={mood < 4 ? FrownFace : mood < 8 ? AverageFace : SmileIcon} className="h-10 w-10 mx-auto"/>
+                    <p className="text-lg font-bold">Mood</p>
+                   </div>
 
-
-                    <Button  onClick={() => setModalOpen(true )} className="ml-5" > Update Friend </Button>
-                    <Button onClick={() => handleDelete(props.name)} className="ml-5 items-c" variant="destructive"> Remove Friend </Button>
+                    <Button  onClick={() => setModalOpen(true )} className="ml-5" > Update </Button>
+                    <Button onClick={() => handleDelete(props.name)} className="ml-5 items-c" variant="destructive" size="icon">
+                        <img src={TrashIcon} className="p-2"/>
+                    </Button>
                 </div>
             
             </div>
