@@ -6,7 +6,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { MakeProtectedPostRequest } from "@/utils/makeProtectedPostRequest";
 import { toast } from "sonner";
 
-export default function MoodForm() {
+export default function MoodForm(props: {updateStats: () => void}) {
     const [mood, setMood] = useState(5);
     const {user, getAccessTokenSilently} = useAuth0();
 
@@ -21,6 +21,8 @@ export default function MoodForm() {
         }; 
     
         const data = await MakeProtectedPostRequest('/api/updateMood',toUpdate, token); 
+        toast.success("Successfully logged today's mood");
+        props.updateStats();
         } catch (e) {
         console.log("Error setting mood: ", e);
         toast.error("Error setting mood");
@@ -30,7 +32,7 @@ export default function MoodForm() {
     return (
         <Popover>
             <PopoverTrigger asChild>
-                <Button className="m-auto max-w-36" variant="default">Log Mood</Button>
+                <Button className="m-auto max-w-36" variant="default">Log Today's Mood</Button>
             </PopoverTrigger>
             <PopoverContent>
                 <div className="flex flex-col gap-3">
