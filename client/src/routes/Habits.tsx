@@ -21,7 +21,7 @@ export default function Habits() {
   const {user, getAccessTokenSilently} = useAuth0(); 
   const [userHabits, setUserHabits] = useState<[]>([]);
 
-  const getHabits = async () => {
+  const getHabits = async ()   => {
     try {
       const token = await getAccessTokenSilently(); 
   
@@ -47,6 +47,7 @@ export default function Habits() {
         done: done,
         userName: user!.name
     }; 
+    console.log("toUpdate:, " ,toUpdate)
 
       const data = await MakeProtectedPostRequest('/api/updateHabit',toUpdate, token); 
       setUserHabits(data.data);

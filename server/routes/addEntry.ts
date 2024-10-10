@@ -25,7 +25,7 @@ router.post('/api/addEntry', async (req, res) => {
         res.json(updatedEntries);
     } catch (error) {
         console.error("Error adding entry: ", error);
-        res.status(500).json({ message: "Error adding entry", error: error.message });
+        res.status(500).json({ message: "Error adding entry"});
     }
 });
 export default router;

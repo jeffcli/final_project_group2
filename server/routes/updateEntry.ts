@@ -15,13 +15,16 @@ router.post('/api/updateEntry', async (req, res) => {
         );
 
         if (!updatedEntry) {
-            return res.status(404).json({ message: 'Entry not found' });
+             res.status(404).json({ message: 'Entry not found' });
+        }
+        else{
+            const userEntries = await journal.find({ userName: req.body.userName });
+
+            res.json({ updatedEntry, userEntries });
         }
 
 
-        const userEntries = await journal.find({ userName: req.body.userName });
-
-        res.json({ updatedEntry, userEntries });
+     
     } catch (error) {
         console.error('Error updating entry:', error);
         res.status(500).json({ message: 'Internal server error' });
