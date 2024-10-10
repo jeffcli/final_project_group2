@@ -5,11 +5,13 @@ import { useAuth0 } from '@auth0/auth0-react'
 import { MakeProtectedPostRequest } from './utils/makeProtectedPostRequest'
 import habitIcon from './assets/task-square-svgrepo-com.svg'
 import journalIcon from './assets/notebook-svgrepo-com.svg'
-import moodIcon from './assets/smile-circle-svgrepo-com.svg'
+import SmileIcon from './assets/smile-circle-svgrepo-com.svg'
 import { Button } from './components/ui/button'
 import MoodForm from './components/MoodForm'
 import { QuoteModal } from './components/QuoteModal'
 import { makeProtectedGetRequest } from './utils/makeProtectedGetRequest'
+import AverageFace from "./assets/neutral-face.svg";
+import FrownFace from "./assets/frown-face.svg";
 
 type wellnessStats = {
   habitsCompleted: string,
@@ -188,7 +190,7 @@ function App() {
         <Card>
           <div className="flex flex-col m-2 h-full">
             <div className="w-16 h-16 mx-auto my-4">
-              <img src={moodIcon} className="w-full h-full object-contain"/>
+              <img src={parseInt(userStats.averageMood) < 4 ? FrownFace : parseInt(userStats.averageMood) < 8 ? AverageFace : SmileIcon} className="w-full h-full object-contain"/>
             </div>  
             <div>
               <h1 className="font-extrabold text-center text-4xl">

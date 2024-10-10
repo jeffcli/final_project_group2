@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label"
 import { MakeProtectedPostRequest } from "@/utils/makeProtectedPostRequest";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useState } from "react";
+import TrashIcon from '../assets/trash.svg';
 
 type Habit = {
   userName: string,
@@ -52,8 +53,8 @@ export default function AddHabitForm(props: {getHabits: () => void, habits: Habi
         {props.habits.map((habit: Habit) => {
           return (
         <div className="grid gap-4 py-1">
-          <div className="grid grid-cols-3 items-center gap-4">
-            <Label className="text-right col-span-2">
+          <div className="flex justify-end gap-4">
+            <Label className="text-right col-span-2 self-center">
               {habit.description}
             </Label>
             <Button
@@ -61,7 +62,10 @@ export default function AddHabitForm(props: {getHabits: () => void, habits: Habi
               variant='destructive'
               className=""
               onClick={() => removeHabit(habit._id)}
-            >Delete</Button>
+              size="icon"
+            >
+              <img src={TrashIcon} className="p-2"/>
+            </Button>
           </div>
         </div>
           )
