@@ -4,10 +4,10 @@ Deployment Link - https://finaldeploymentwebware-c99517e0c12a.herokuapp.com/
 ## Application overview:
 Our application allows users to conveniently keep track of their wellness routines. Our app includes the following features:
 <br>
-1. Users can create habits that they want to build and keep track of how often they are completing those habits. This will allow users to build a routine, and make progress to achieving a consistent set of habits.
-2. Second, wellness tracker allows users to log their mood to keep track of their average mood over the last seven days. This will help users log their wellbeing, and identify any causes of stress or mental unwellness.
-3. Third, users can suggest and view inspirational quotes suggested by other users.
-4.Additionally, users can maintain a journal to reflect on their lives. This will allow users to keep track of their daily experiences.
+1. Users can create habits that they want to build and keep track of how often they are completing those habits. This will allow users to build a routine, and make progress to achieving a consistent set of habits. Users can add, delete, and check off habits on the habits page.
+2. Second, wellness tracker allows users to log their mood out of 10 to keep track of their average mood over the last seven days. This will help users log their wellbeing, and identify any causes of stress or mental unwellness.
+3. Third, users can suggest and view inspirational quotes suggested by other users on the home page.
+4. Additionally, users can maintain a journal to reflect on their lives by submitting and viewing entries on a daily basis. This will allow users to keep track of their daily experiences, and users can edit or delete these entries later.
 5. Finally, users can keep track of their friends, and their respective wellbeing via their mood. Users can add other users (these users are fetched from the Auth0 management API) as friends, and create a relationship between friends (ex: roommates, friend, etc.). Friends can be updated and deleted easily as well, allowing users to easily change the people they wish to keep in touch with.
 
 In conclusion, our application enables users to quickly and easily keep track of their wellness, and build positive habits that allow them to enhance their wellbeing.
@@ -43,14 +43,15 @@ Vivek
 - Repo Setup (FE+BE, auth0, mongo)
 - Friends Page
 - Heroku deployment
-<br>
+
 Carter
 - Habits Page
 - Home/Welcome Page
 - Figma UI design mockups
-<br>
+
 Jeffrey
 - Notebook Page
 - Figma Mockups
 - MongoDB schema designs
+
 Video link will go here
