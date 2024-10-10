@@ -22,12 +22,12 @@ const JournalEntryForm: React.FC<JournalEntryFormProps> = ({ title, text, setTit
             const bodyData = {
                 userName: user!.name,
                 title: title,
-                dateCreated: new Date().toISOString(),
                 entry: text,
+                dateCreated: new Date().toISOString(),
             };
 
             await MakeProtectedPostRequest('/api/addEntry', bodyData, token);
-            await getEntries(); // Ensure this updates the entries state
+            await getEntries();
         } catch (e) {
             console.log("Error adding entry: ", e);
         }
@@ -36,7 +36,7 @@ const JournalEntryForm: React.FC<JournalEntryFormProps> = ({ title, text, setTit
     return (
         <div className="bg-white shadow-lg rounded-lg p-6 mb-6">
             <h1 className="text-center text-2xl font-bold mb-4">Add a journal entry</h1>
-            <form onSubmit={handleSubmit}>
+            <form>
                 <div className="mb-4">
                     <input
                         type="text"
